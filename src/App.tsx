@@ -208,6 +208,63 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          {/* Card 3 */}
+          <div onClick={() => openProduct('Avisos Luminosos', 'https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop', false)}
+               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+            <img src="https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop" alt="Luminosos Neo" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            
+            <div className="absolute top-6 left-6">
+              <span className="backdrop-blur-md bg-yellow-500/20 text-[10px] font-bold uppercase tracking-[0.2em] text-yellow-400 px-4 py-2 rounded-full border border-yellow-500/30">Neón Flex</span>
+            </div>
+            
+            <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+              <h4 className="font-display font-bold text-3xl leading-none mb-3 drop-shadow-lg">Letras Luminosas</h4>
+              <div className="flex items-center justify-between pt-5 border-t border-white/10 opacity-80">
+                <div className="flex items-center gap-2"><IconStar className="text-yellow-400" /> <span className="font-bold">4.8</span> <span className="text-xs">(156+)</span></div>
+                <div className="flex items-center gap-2 font-medium"><IconClock size={14} /> <span>4D Ent.</span></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 4 */}
+          <div onClick={() => openProduct('Pendones y Lonas', 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', true)}
+               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop" alt="Pendones" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            
+            <div className="absolute top-6 left-6">
+              <span className="backdrop-blur-md bg-blue-500/20 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400 px-4 py-2 rounded-full border border-blue-500/30">Gran Formato</span>
+            </div>
+            
+            <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+              <h4 className="font-display font-bold text-3xl leading-none mb-3 drop-shadow-lg">Pendones y Lonas</h4>
+              <div className="flex items-center justify-between pt-5 border-t border-white/10 opacity-80">
+                <div className="flex items-center gap-2"><IconStar className="text-yellow-400" /> <span className="font-bold">4.7</span> <span className="text-xs">(230+)</span></div>
+                <div className="flex items-center gap-2 font-medium"><IconClock size={14} /> <span>24H Ent.</span></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 5 */}
+          <div onClick={() => openProduct('Diseño Offset & Flyers', 'https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop', false)}
+               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+            <img src="https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop" alt="Papeleria" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            
+            <div className="absolute top-6 left-6">
+              <span className="backdrop-blur-md bg-white/10 text-[10px] font-bold uppercase tracking-[0.2em] text-white px-4 py-2 rounded-full border border-white/20">Editorial</span>
+            </div>
+            
+            <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+              <h4 className="font-display font-bold text-3xl leading-none mb-3 drop-shadow-lg">Impresión Papelería</h4>
+              <div className="flex items-center justify-between pt-5 border-t border-white/10 opacity-80">
+                <div className="flex items-center gap-2"><IconStar className="text-yellow-400" /> <span className="font-bold">5.0</span> <span className="text-xs">(95+)</span></div>
+                <div className="flex items-center gap-2 font-medium"><IconClock size={14} /> <span>3D Ent.</span></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
