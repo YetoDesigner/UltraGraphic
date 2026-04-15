@@ -2,17 +2,21 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 
-// Configuración de Firebase (Debes reemplazar esto con tus variables de entorno o credenciales en Vercel)
+import { getAnalytics } from "firebase/analytics";
+
+// Configuración de Firebase
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDummyKeyForNow",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "tu-app.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "tu-app",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "tu-app.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:123456"
+  apiKey: "AIzaSyBZACfckXf1eIn9jEUp3g96OBViEyEOFg8",
+  authDomain: "ultragraphicox.firebaseapp.com",
+  projectId: "ultragraphicox",
+  storageBucket: "ultragraphicox.firebasestorage.app",
+  messagingSenderId: "39159254765",
+  appId: "1:39159254765:web:bb5838f4cead5c2fc7c6e4",
+  measurementId: "G-HR6GDTWS2D"
 };
 
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
