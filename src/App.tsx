@@ -173,7 +173,7 @@ export default function App() {
         <div className="flex overflow-x-auto no-scrollbar gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container">
           {/* Card 1 */}
           <div onClick={() => openProduct('Avisos Acrílico 3D', 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1563298723-dcfebaa392e3?q=80&w=800&auto=format&fit=crop" alt="Avisos" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -192,7 +192,7 @@ export default function App() {
           
           {/* Card 2 */}
           <div onClick={() => openProduct('Impresión de Vinilo', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop', true)}
-               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Vinilo" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -211,7 +211,7 @@ export default function App() {
 
           {/* Card 3 */}
           <div onClick={() => openProduct('Avisos Luminosos', 'https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop" alt="Luminosos Neo" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -230,7 +230,7 @@ export default function App() {
 
           {/* Card 4 */}
           <div onClick={() => openProduct('Pendones y Lonas', 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', true)}
-               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop" alt="Pendones" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -249,7 +249,7 @@ export default function App() {
 
           {/* Card 5 */}
           <div onClick={() => openProduct('Diseño Offset & Flyers', 'https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop" alt="Papeleria" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -276,7 +276,7 @@ export default function App() {
         </div>
         <div className="flex overflow-x-auto no-scrollbar gap-5 px-6 pb-8 snap-x snap-mandatory scroll-container">
           <div onClick={() => openProduct('Tarjetas Elite', 'https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop" alt="Cards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -285,7 +285,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Reconocimientos', 'https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop" alt="Awards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -294,7 +294,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Sellos Automáticos', 'https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop" alt="Sellos" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -303,7 +303,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Carnets PVC', 'https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop" alt="Identificacion" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -312,12 +312,39 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Mugs Personalizados', 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop" alt="Mugs" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
               <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Mugs y Termos</h4>
               <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Sublimación Pro</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Empaques Ecológicos', 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop" alt="Empaques Ecos" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Cajas Ecológicas</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-green-400">Kraft & Cartón</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Ropa Corporativa', 'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800&auto=format&fit=crop" alt="Ropa corporativa" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Ropa Corporativa</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">T-Shirts y Gorras</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Empaques de Lujo', 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop" alt="Cajas de Lujo" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Empaques Elite</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Acabados Especiales</span>
             </div>
           </div>
         </div>
@@ -465,43 +492,7 @@ export default function App() {
                  <h2 className="text-3xl md:text-5xl font-display font-black text-white mb-4">{selectedProduct.title}</h2>
                  <p className="text-white/50 text-sm md:text-base leading-relaxed mb-6">El diseño moderno requiere materiales y acabados que resalten tu marca por encima del resto. Descubre por qué los expertos prefieren Ultra.</p>
                  
-                 {/* Calculator Unit */}
-                 <div className="bg-white/5 rounded-2xl p-6 border border-white/10 relative overflow-hidden group">
-                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-yellow-500 opacity-50"></div>
-                   <h4 className="font-bold flex items-center gap-2 mb-5 text-white/90"><IconCalculator size={18} className="text-primary"/> Calculadora Inteligente</h4>
-                   
-                   <div className="grid grid-cols-2 gap-4 mb-5">
-                     <div className="relative">
-                       <label className="block text-[10px] uppercase tracking-wider font-bold text-white/40 mb-2">Ancho (cm)</label>
-                       <input type="number" value={calcWidth} onChange={(e) => setCalcWidth(e.target.value)} className="w-full bg-black/40 border border-white/10 focus:border-primary/50 outline-none rounded-xl px-4 py-3 text-white transition-colors input-transparent" />
-                     </div>
-                     <div className="relative">
-                       <label className="block text-[10px] uppercase tracking-wider font-bold text-white/40 mb-2">Alto (cm)</label>
-                       <input type="number" value={calcHeight} onChange={(e) => setCalcHeight(e.target.value)} className="w-full bg-black/40 border border-white/10 focus:border-primary/50 outline-none rounded-xl px-4 py-3 text-white transition-colors input-transparent" />
-                     </div>
-                   </div>
-
-                   <div className="space-y-3 mb-6">
-                     <label className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 cursor-pointer hover:bg-white/10 transition-colors">
-                       <span className="text-sm font-medium text-white/80">Incluir Instalación</span>
-                       <input type="checkbox" checked={calcInstallation} onChange={(e) => setCalcInstallation(e.target.checked)} className="w-4 h-4 accent-primary" />
-                     </label>
-                     {selectedProduct.isVinyl && (
-                       <label className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 cursor-pointer hover:bg-white/10 transition-colors">
-                         <span className="text-sm font-medium text-white/80">Plastificado Mate/Brillante</span>
-                         <input type="checkbox" checked={calcPlastificado} onChange={(e) => setCalcPlastificado(e.target.checked)} className="w-4 h-4 accent-primary" />
-                       </label>
-                     )}
-                   </div>
-
-                   <div className="pt-5 border-t border-white/10 flex items-center justify-between">
-                     <div>
-                       <span className="block text-[10px] uppercase font-bold text-white/40 mb-1">Costo Estimado</span>
-                       <span className="text-3xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">{calculatePrice()}</span>
-                     </div>
-                   </div>
-                 </div>
-               </div>
+                </div>
 
                {/* Call to Action */}
                <button onClick={() => window.open(`https://wa.me/573027502695?text=Hola, quiero agendar mi: ${selectedProduct.title}`, '_blank')} 
