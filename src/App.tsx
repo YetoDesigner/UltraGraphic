@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { auth, loginWithGoogle, logoutUser } from './firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 // --- SVGs Icons (Lucide Style) ---
 const IconArrowRight = ({ size = 24, className = "" }) => (
@@ -30,56 +32,44 @@ const IconCalculator = ({ size = 20, className = "" }) => (
 );
 
 export default function App() {
-  const [welcomeVisible, setWelcomeVisible] = useState(true);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('home');
   const [clientData, setClientData] = useState<any>(null);
   
-  // Registration Form
-  const [regName, setRegName] = useState('');
-  const [regBrand, setRegBrand] = useState('');
-  const [regPhone, setRegPhone] = useState('');
-
   // Product Modal Data
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [calcWidth, setCalcWidth] = useState('100');
-  const [calcHeight, setCalcHeight] = useState('100');
-  const [calcInstallation, setCalcInstallation] = useState(false);
-  const [calcPlastificado, setCalcPlastificado] = useState(false);
 
   // QR Modal
   const [qrText, setQrText] = useState('');
   const [qrImageSrc, setQrImageSrc] = useState('');
 
   useEffect(() => {
-    // Check if user is registered
-    const data = localStorage.getItem('ultra_client_data');
-    if (data) {
-      setClientData(JSON.parse(data));
-      setWelcomeVisible(false);
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setClientData({
+          name: user.displayName || 'Usuario',
+          email: user.email || '',
+          photoURL: user.photoURL || ''
+        });
+      } else {
+        setClientData(null);
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
-  const handleStart = () => {
-    setWelcomeVisible(false);
-    if (!clientData) setActiveModal('register');
-  };
-
-  const handleRegisterSubmit = () => {
-    if (!regName || !regBrand || !regPhone) {
-      alert('Por favor completa todos los campos');
-      return;
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      setActiveModal(null);
+    } catch (error) {
+      alert("Error al iniciar sesión con Google");
     }
-    const data = { name: regName, brand: regBrand, phone: regPhone, registeredAt: new Date().toISOString() };
-    localStorage.setItem('ultra_client_data', JSON.stringify(data));
-    setClientData(data);
-    setActiveModal(null);
   };
 
-  const handleLogout = () => {
-    if (window.confirm('¿Estás seguro de cerrar sesión?')) {
-      localStorage.removeItem('ultra_client_data');
-      setClientData(null);
+  const handleLogout = async () => {
+    if (window.confirm('¿Estás seguro de cerrar sesión de Google?')) {
+      await logoutUser();
       setActiveModal(null);
     }
   };
@@ -123,27 +113,7 @@ export default function App() {
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-yellow-600/10 blur-[150px] rounded-full mix-blend-screen opacity-50" />
       </div>
 
-      {/* Welcome Overlay */}
-      {welcomeVisible && (
-        <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center">
-          <div className="text-center mb-16 px-4">
-            <p className="text-white/60 text-lg md:text-2xl font-medium tracking-[0.2em] uppercase mb-4 animate-fade-in-up transition-opacity">Ingresa al futuro de</p>
-            <h1 className="text-7xl md:text-9xl font-display font-black leading-none animate-ultra-reveal drop-shadow-2xl flex flex-col md:flex-row items-center">
-              <span className="text-white">Ultra</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-primary via-[#FF8C42] to-yellow-500 ml-0 md:ml-4">Graphic</span>
-            </h1>
-          </div>
-          <button 
-            onClick={handleStart}
-            className="group relative flex items-center gap-4 px-10 py-5 bg-white/5 backdrop-blur-md rounded-full border border-white/10 hover:border-primary/50 transition-all hover:scale-105 active:scale-95 shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-[0_0_20px_rgba(242,125,38,0.5)] group-hover:shadow-[0_0_30px_rgba(242,125,38,0.8)] transition-all z-10">
-              <IconArrowRight size={22} className="text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-[0.3em] uppercase text-white/90 group-hover:text-white transition-colors z-10">Iniciar</span>
-          </button>
-        </div>
-      )}
+
 
       {/* Header */}
       <header className="px-4 pt-6 pb-4 sticky top-0 z-40">
@@ -368,8 +338,12 @@ export default function App() {
 
           <button onClick={() => { setActiveTab('user'); setActiveModal(clientData ? 'profile' : 'register'); }} 
                   className={`relative p-2 transition-all duration-300 ${activeTab === 'user' ? 'text-primary' : 'text-white/40 hover:text-white/80'}`}>
-            <IconUser size={22} className={activeTab === 'user' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
-            {activeTab === 'user' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(242,125,38,1)]" />}
+            {clientData?.photoURL ? (
+              <img src={clientData.photoURL} alt="User" referrerPolicy="no-referrer" className="w-6 h-6 rounded-full border border-white/20 object-cover" />
+            ) : (
+              <IconUser size={22} className={activeTab === 'user' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
+            )}
+            {activeTab === 'user' && !clientData?.photoURL && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(242,125,38,1)]" />}
           </button>
         </nav>
       </div>
@@ -384,21 +358,17 @@ export default function App() {
       {/* Register Modal */}
       {activeModal === 'register' && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 pointer-events-none">
-          <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl animate-fade-in-up pointer-events-auto">
-            <div className="p-8 pb-6 border-b border-white/5 relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-yellow-500"></div>
-              <h3 className="font-display font-bold text-white text-2xl mb-1">Crea tu Cuenta</h3>
-              <p className="text-sm text-white/50">Únete a Ultra Graphic y accede a cotizaciones.</p>
-              <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white"><IconX size={20} /></button>
+          <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl flex flex-col items-center animate-fade-in-up pointer-events-auto text-center p-8 relative">
+            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white"><IconX size={20} /></button>
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+               <svg className="w-10 h-10" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             </div>
-            <div className="p-8 space-y-4">
-              <input type="text" placeholder="Nombre de Empresa / Personal" value={regName} onChange={e => setRegName(e.target.value)} className="w-full bg-white/5 border border-white/10 focus:border-primary/50 outline-none rounded-xl py-4 px-5 text-white transition-colors" />
-              <input type="text" placeholder="Correo Electrónico" value={regBrand} onChange={e => setRegBrand(e.target.value)} className="w-full bg-white/5 border border-white/10 focus:border-primary/50 outline-none rounded-xl py-4 px-5 text-white transition-colors" />
-              <input type="tel" placeholder="Tu Teléfono (WhatsApp)" value={regPhone} onChange={e => setRegPhone(e.target.value.replace(/[^0-9\s+]/g, ''))} className="w-full bg-white/5 border border-white/10 focus:border-primary/50 outline-none rounded-xl py-4 px-5 text-white transition-colors" />
-              <button onClick={handleRegisterSubmit} className="w-full bg-gradient-to-r from-primary to-yellow-600 text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)] hover:shadow-[0_0_30px_rgba(242,125,38,0.6)] active:scale-95 transition-all mt-4">
-                Completar Registro
-              </button>
-            </div>
+            <h3 className="font-display font-bold text-white text-2xl mb-2">Ingresa con Google</h3>
+            <p className="text-sm text-white/50 mb-8">Accede al panel de clientes de Ultra usando tu cuenta de Google.</p>
+            <button onClick={handleGoogleLogin} className="w-full bg-white text-black font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] active:scale-95 transition-all flex items-center justify-center gap-3">
+              <svg className="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Continuar con Google
+            </button>
           </div>
         </div>
       )}
@@ -408,17 +378,20 @@ export default function App() {
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 pointer-events-none">
           <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl p-8 flex flex-col items-center text-center animate-fade-in-up pointer-events-auto relative">
             <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white"><IconX size={20} /></button>
-            
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-yellow-500 p-1 mb-6 shadow-[0_0_20px_rgba(242,125,38,0.4)]">
-              <div className="w-full h-full bg-[#111] rounded-full flex items-center justify-center">
-                 <span className="text-3xl font-display font-bold text-white">{clientData.name.substring(0,2).toUpperCase()}</span>
+            {clientData.photoURL ? (
+              <img src={clientData.photoURL} alt="Profile" referrerPolicy="no-referrer" className="w-24 h-24 rounded-full border-4 border-white/10 mb-4 shadow-[0_0_20px_rgba(242,125,38,0.4)] object-cover" />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-yellow-500 p-1 mb-6 shadow-[0_0_20px_rgba(242,125,38,0.4)]">
+                <div className="w-full h-full bg-[#111] rounded-full flex items-center justify-center">
+                   <span className="text-3xl font-display font-bold text-white">{clientData.name.substring(0,2).toUpperCase()}</span>
+                </div>
               </div>
-            </div>
+            )}
             <h3 className="text-2xl font-display font-bold text-white mb-1">{clientData.name}</h3>
-            <p className="text-white/40 font-medium mb-8 text-sm">{clientData.brand}</p>
+            <p className="text-white/40 font-medium mb-8 text-sm">{clientData.email}</p>
             
-            <button onClick={handleLogout} className="w-full py-4 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 transition-all">
-              Cerrar Sesión
+            <button onClick={handleLogout} className="w-full py-4 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400 transition-all font-bold">
+              Cerrar Sesión Google
             </button>
           </div>
         </div>
@@ -499,7 +472,7 @@ export default function App() {
                  className="mt-auto w-full group relative flex justify-center items-center gap-3 bg-gradient-to-r from-[#F27D26] to-[#E55A00] text-white font-bold py-5 px-8 rounded-full shadow-[0_10px_30px_rgba(242,125,38,0.4)] hover:shadow-[0_15px_40px_rgba(242,125,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all overflow-hidden shrink-0">
                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
                  <span className="relative z-10 text-lg uppercase tracking-wider">Enviar Mensaje</span> 
-                 <svg className="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12c0 1.94.57 3.75 1.54 5.3L2 22l4.82-1.46C8.36 21.46 10.12 22 11.99 22c5.52 0 10-4.48 10-10S17.51 2 11.99 2zm5.72 14.16c-.24.68-1.4 1.25-1.93 1.34-.44.07-.98.13-1.66-.08-1.57-.49-3.41-1.63-4.81-3.04-1.69-1.7-2.61-3.66-2.65-5.59-.03-1.4.67-2.13 1.01-2.5.34-.37.93-.46 1.23-.46.3 0 .59.01.85.03.28.02.66-.1.97.64.33.8 1.09 2.66 1.18 2.85.11.23.19.46.06.71-.12.24-.26.39-.51.64-.26.26-.52.61-.74.83-.2.2-.42.43-.19.82.23.39 1 1.63 2.12 2.62 1.45 1.29 2.67 1.69 3.07 1.88.4.19.64.16.88-.09.24-.25 1.05-1.22 1.34-1.64.28-.42.57-.35.94-.21.37.14 2.34 1.1 2.74 1.3.4.19.67.3.77.47.1.18.1.94-.14 1.61z"/></svg>
+                 <svg className="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.436-9.88 9.88-9.88 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.88-9.881 9.88zm8.508-18.395A11.859 11.859 0 0012.052 0C5.461 0 .092 5.36.09 11.956c0 2.106.55 4.161 1.594 5.975L0 24l6.216-1.63a11.865 11.865 0 005.836 1.517h.005c6.589 0 11.958-5.36 11.961-11.956a11.86 11.86 0 00-3.498-8.487z"/></svg>
                </button>
              </div>
           </div>
