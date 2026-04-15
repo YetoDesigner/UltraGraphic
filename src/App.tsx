@@ -170,10 +170,10 @@ export default function App() {
           </div>
         </div>
         
-        <div className="flex overflow-x-auto custom-scrollbar gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container">
+        <div className="flex overflow-x-auto no-scrollbar gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container">
           {/* Card 1 */}
           <div onClick={() => openProduct('Avisos Acrílico 3D', 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1563298723-dcfebaa392e3?q=80&w=800&auto=format&fit=crop" alt="Avisos" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -192,7 +192,7 @@ export default function App() {
           
           {/* Card 2 */}
           <div onClick={() => openProduct('Impresión de Vinilo', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop', true)}
-               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Vinilo" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -211,7 +211,7 @@ export default function App() {
 
           {/* Card 3 */}
           <div onClick={() => openProduct('Avisos Luminosos', 'https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=800&auto=format&fit=crop" alt="Luminosos Neo" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -230,7 +230,7 @@ export default function App() {
 
           {/* Card 4 */}
           <div onClick={() => openProduct('Pendones y Lonas', 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop', true)}
-               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop" alt="Pendones" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -249,7 +249,7 @@ export default function App() {
 
           {/* Card 5 */}
           <div onClick={() => openProduct('Diseño Offset & Flyers', 'https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop', false)}
-               className="relative min-w-[300px] md:min-w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
+               className="relative min-w-[350px] md:min-w-[500px] h-[380px] md:h-[420px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
             <img src="https://images.unsplash.com/photo-1588666309990-d68f08e3d4a6?q=80&w=800&auto=format&fit=crop" alt="Papeleria" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-110 transition-transform duration-1000 ease-out" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
@@ -274,23 +274,50 @@ export default function App() {
           <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-1">Nuevos Lanzamientos</h2>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Servicios Pro</p>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-6 pb-4">
-          <div onClick={() => openProduct('Tarjetas Elite', 'https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=600&auto=format&fit=crop', false)} 
-               className="relative h-[200px] md:h-[260px] rounded-[1.5rem] overflow-hidden group border border-white/5 bg-card cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=600&auto=format&fit=crop" alt="Cards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+        <div className="flex overflow-x-auto no-scrollbar gap-5 px-6 pb-8 snap-x snap-mandatory scroll-container">
+          <div onClick={() => openProduct('Tarjetas Elite', 'https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop" alt="Cards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h4 className="font-display font-bold text-sm md:text-lg">Tarjetas Elite</h4>
-              <span className="text-[10px] text-white/60">Mate y Brillo UV</span>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Tarjetas Elite</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Mate y Brillo UV</span>
             </div>
           </div>
-          <div onClick={() => openProduct('Reconocimientos', 'https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=600&auto=format&fit=crop', false)} 
-               className="relative h-[200px] md:h-[260px] rounded-[1.5rem] overflow-hidden group border border-white/5 bg-card cursor-pointer">
-            <img src="https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=600&auto=format&fit=crop" alt="Awards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          <div onClick={() => openProduct('Reconocimientos', 'https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop" alt="Awards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h4 className="font-display font-bold text-sm md:text-lg">Reconocimientos</h4>
-              <span className="text-[10px] text-primary font-medium">Trofeos 3D</span>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Reconocimientos</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-primary">Trofeos 3D</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Sellos Automáticos', 'https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop" alt="Sellos" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Sellos Automáticos</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Trodat / Colop</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Carnets PVC', 'https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop" alt="Identificacion" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Carnets Alta Calidad</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">PVC y Lanyards</span>
+            </div>
+          </div>
+          <div onClick={() => openProduct('Mugs Personalizados', 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop', false)} 
+               className="relative min-w-[280px] md:min-w-[380px] h-[260px] md:h-[320px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop" alt="Mugs" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+              <h4 className="font-display font-bold text-xl md:text-2xl mb-1">Mugs y Termos</h4>
+              <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Sublimación Pro</span>
             </div>
           </div>
         </div>
