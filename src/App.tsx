@@ -60,6 +60,48 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // Horizontal Scroll Scale Effect
+  useEffect(() => {
+    const containers = document.querySelectorAll('.scroll-container');
+    
+    const updateScale = (container: Element) => {
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      
+      Array.from(container.children).forEach((child: any) => {
+        const childRect = child.getBoundingClientRect();
+        const childCenter = childRect.left + childRect.width / 2;
+        const distance = Math.abs(containerCenter - childCenter);
+        
+        if (distance < childRect.width / 1.5) {
+          child.style.transform = 'scale(1)';
+          child.style.opacity = '1';
+        } else {
+          child.style.transform = 'scale(0.85)';
+          child.style.opacity = '0.5';
+        }
+      });
+    };
+
+    const handleScroll = (e: Event) => {
+      requestAnimationFrame(() => updateScale(e.currentTarget as Element));
+    };
+
+    containers.forEach(container => {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+      Array.from(container.children).forEach((child: any) => {
+        child.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease';
+      });
+      // Initial scale calculation delay to let render finish
+      setTimeout(() => updateScale(container), 100);
+    });
+
+    return () => {
+      containers.forEach(container => {
+        container.removeEventListener('scroll', handleScroll);
+      });
+    };
+  }, []);
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
@@ -146,7 +188,7 @@ export default function App() {
 
       {/* Header */}
       <header className="px-4 pt-6 pb-4 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto glass-nav rounded-full px-2 py-2 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+        <div className="max-w-4xl mx-auto glass-nav rounded-full px-2 py-2 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-yellow-500 p-[2px] shadow-lg shadow-primary/20">
               <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png" alt="Logo" className="w-full h-full object-cover rounded-full bg-black" />
@@ -156,7 +198,18 @@ export default function App() {
             <span className="text-white">Ultra</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">Graphic</span>
           </h1>
-          <div className="w-12" /> {/* Spacer */}
+          <div className="flex justify-end pr-1 z-50">
+            <button onClick={() => { setActiveTab('user'); setActiveModal(clientData ? 'profile' : 'register'); }} 
+                    className="relative p-0 transition-transform duration-300 hover:scale-105 active:scale-95">
+              {clientData?.photoURL ? (
+                <img src={clientData.photoURL} alt="User" referrerPolicy="no-referrer" className="w-10 h-10 rounded-full border border-white/20 object-cover shadow-[0_0_15px_rgba(255,255,255,0.1)]" />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-md">
+                  <IconUser size={18} className="text-white flex-shrink-0" />
+                </div>
+              )}
+            </button>
+          </div> 
         </div>
       </header>
 
@@ -432,29 +485,19 @@ export default function App() {
       </section>
 
       {/* Floating Bottom Nav */}
-      <div className="fixed bottom-6 left-0 right-0 px-6 z-50 flex justify-center pointer-events-none">
-        <nav className="bg-black/60 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-full px-6 py-3 flex gap-8 md:gap-12 items-center pointer-events-auto">
-          <button onClick={() => setActiveTab('home')} className={`relative p-2 transition-all duration-300 ${activeTab === 'home' ? 'text-primary' : 'text-white/40 hover:text-white/80'}`}>
-            <IconHome size={22} className={activeTab === 'home' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
+      <div className="fixed bottom-6 left-0 right-0 px-6 z-50 flex justify-center pointer-events-none animate-fade-in-up transition-transform duration-700">
+        <nav className="bg-black/60 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-full px-8 py-3 flex gap-12 md:gap-16 items-center pointer-events-auto hover:bg-black/80 hover:border-white/20 transition-all cursor-pointer">
+          <button onClick={() => setActiveTab('home')} className={`relative p-2 transition-all duration-300 ${activeTab === 'home' ? 'text-primary scale-110' : 'text-white/40 hover:text-white/80 hover:scale-105'}`}>
+            <IconHome size={24} className={activeTab === 'home' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
             {activeTab === 'home' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(242,125,38,1)]" />}
           </button>
           
-          <button onClick={() => setActiveModal('removeBg')} className={`relative p-2 transition-all duration-300 ${activeModal === 'removeBg' ? 'text-primary' : 'text-white/40 hover:text-white/80'}`}>
-            <IconWand size={22} className={activeModal === 'removeBg' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
+          <button onClick={() => setActiveModal('removeBg')} className={`relative p-2 transition-all duration-300 ${activeModal === 'removeBg' ? 'text-primary scale-110' : 'text-white/40 hover:text-white/80 hover:scale-105'}`}>
+            <IconWand size={24} className={activeModal === 'removeBg' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
           </button>
 
-          <button onClick={() => setActiveModal('qr')} className={`relative p-2 transition-all duration-300 ${activeModal === 'qr' ? 'text-primary' : 'text-white/40 hover:text-white/80'}`}>
-            <IconQr size={22} className={activeModal === 'qr' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
-          </button>
-
-          <button onClick={() => { setActiveTab('user'); setActiveModal(clientData ? 'profile' : 'register'); }} 
-                  className={`relative p-2 transition-all duration-300 ${activeTab === 'user' ? 'text-primary' : 'text-white/40 hover:text-white/80'}`}>
-            {clientData?.photoURL ? (
-              <img src={clientData.photoURL} alt="User" referrerPolicy="no-referrer" className="w-6 h-6 rounded-full border border-white/20 object-cover" />
-            ) : (
-              <IconUser size={22} className={activeTab === 'user' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
-            )}
-            {activeTab === 'user' && !clientData?.photoURL && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(242,125,38,1)]" />}
+          <button onClick={() => setActiveModal('qr')} className={`relative p-2 transition-all duration-300 ${activeModal === 'qr' ? 'text-primary scale-110' : 'text-white/40 hover:text-white/80 hover:scale-105'}`}>
+            <IconQr size={24} className={activeModal === 'qr' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
           </button>
         </nav>
       </div>
