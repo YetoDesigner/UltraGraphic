@@ -346,6 +346,7 @@ export default function App() {
               <span className="text-xs font-semibold uppercase tracking-[0.1em] text-white/60">Acabados Especiales</span>
             </div>
           </div>
+        </div>
       </section>
 
       {/* Third Scroll Section */}
