@@ -276,7 +276,7 @@ export default function App() {
         </div>
         <div className="flex overflow-x-auto no-scrollbar gap-5 px-6 pb-8 snap-x snap-mandatory scroll-container">
           <div onClick={() => openProduct('Tarjetas Elite', 'https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop" alt="Cards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -285,7 +285,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Reconocimientos', 'https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1622668579708-25039f997cb6?q=80&w=800&auto=format&fit=crop" alt="Awards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -294,7 +294,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Sellos Automáticos', 'https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1588147285627-7cdfc80c10b4?q=80&w=800&auto=format&fit=crop" alt="Sellos" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -303,7 +303,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Carnets PVC', 'https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1551847677-dc82d764e1eb?q=80&w=800&auto=format&fit=crop" alt="Identificacion" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -312,7 +312,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Mugs Personalizados', 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?q=80&w=800&auto=format&fit=crop" alt="Mugs" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -321,7 +321,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Empaques Ecológicos', 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop" alt="Empaques Ecos" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -330,7 +330,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Ropa Corporativa', 'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=800&auto=format&fit=crop" alt="Ropa corporativa" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -339,7 +339,7 @@ export default function App() {
             </div>
           </div>
           <div onClick={() => openProduct('Empaques de Lujo', 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop', false)} 
-               className="relative min-w-[280px] md:min-w-[380px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
+               className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?q=80&w=800&auto=format&fit=crop" alt="Cajas de Lujo" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
@@ -496,10 +496,10 @@ export default function App() {
 
                {/* Call to Action */}
                <button onClick={() => window.open(`https://wa.me/573027502695?text=Hola, quiero agendar mi: ${selectedProduct.title}`, '_blank')} 
-                 className="mt-auto w-full group relative flex justify-center items-center gap-3 bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-6 rounded-xl border border-white/10 shadow-xl transition-all active:scale-95 shrink-0">
-                 <div className="absolute inset-0 bg-gradient-to-r from-[#25D366]/20 to-[#1da851]/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                 <span className="relative z-10">Cotizar Ext. WhatsApp</span> 
-                 <svg className="w-5 h-5 relative z-10 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12c0 1.94.57 3.75 1.54 5.3L2 22l4.82-1.46C8.36 21.46 10.12 22 11.99 22c5.52 0 10-4.48 10-10S17.51 2 11.99 2zm5.72 14.16c-.24.68-1.4 1.25-1.93 1.34-.44.07-.98.13-1.66-.08-1.57-.49-3.41-1.63-4.81-3.04-1.69-1.7-2.61-3.66-2.65-5.59-.03-1.4.67-2.13 1.01-2.5.34-.37.93-.46 1.23-.46.3 0 .59.01.85.03.28.02.66-.1.97.64.33.8 1.09 2.66 1.18 2.85.11.23.19.46.06.71-.12.24-.26.39-.51.64-.26.26-.52.61-.74.83-.2.2-.42.43-.19.82.23.39 1 1.63 2.12 2.62 1.45 1.29 2.67 1.69 3.07 1.88.4.19.64.16.88-.09.24-.25 1.05-1.22 1.34-1.64.28-.42.57-.35.94-.21.37.14 2.34 1.1 2.74 1.3.4.19.67.3.77.47.1.18.1.94-.14 1.61z"/></svg>
+                 className="mt-auto w-full group relative flex justify-center items-center gap-3 bg-gradient-to-r from-[#F27D26] to-[#E55A00] text-white font-bold py-5 px-8 rounded-full shadow-[0_10px_30px_rgba(242,125,38,0.4)] hover:shadow-[0_15px_40px_rgba(242,125,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all overflow-hidden shrink-0">
+                 <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
+                 <span className="relative z-10 text-lg uppercase tracking-wider">Enviar Mensaje</span> 
+                 <svg className="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.99 2C6.47 2 2 6.48 2 12c0 1.94.57 3.75 1.54 5.3L2 22l4.82-1.46C8.36 21.46 10.12 22 11.99 22c5.52 0 10-4.48 10-10S17.51 2 11.99 2zm5.72 14.16c-.24.68-1.4 1.25-1.93 1.34-.44.07-.98.13-1.66-.08-1.57-.49-3.41-1.63-4.81-3.04-1.69-1.7-2.61-3.66-2.65-5.59-.03-1.4.67-2.13 1.01-2.5.34-.37.93-.46 1.23-.46.3 0 .59.01.85.03.28.02.66-.1.97.64.33.8 1.09 2.66 1.18 2.85.11.23.19.46.06.71-.12.24-.26.39-.51.64-.26.26-.52.61-.74.83-.2.2-.42.43-.19.82.23.39 1 1.63 2.12 2.62 1.45 1.29 2.67 1.69 3.07 1.88.4.19.64.16.88-.09.24-.25 1.05-1.22 1.34-1.64.28-.42.57-.35.94-.21.37.14 2.34 1.1 2.74 1.3.4.19.67.3.77.47.1.18.1.94-.14 1.61z"/></svg>
                </button>
              </div>
           </div>
