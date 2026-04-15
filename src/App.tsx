@@ -161,7 +161,7 @@ export default function App() {
       </header>
 
       {/* Featured Section */}
-      <section className="py-6 relative z-10 max-w-7xl mx-auto">
+      <section className="pt-4 pb-0 relative z-10 max-w-7xl mx-auto">
         <div className="px-6 mb-4 flex justify-between items-end">
           <div>
             <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-1">Catálogo Estelar</h2>
@@ -268,7 +268,7 @@ export default function App() {
       </section>
 
       {/* Tools / Pro Section */}
-      <section className="py-6 relative z-10 max-w-7xl mx-auto">
+      <section className="pt-0 pb-0 relative z-10 max-w-7xl mx-auto">
         <div className="px-6 mb-4">
           <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-1">Nuevos Lanzamientos</h2>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Servicios Pro</p>
@@ -350,7 +350,7 @@ export default function App() {
       </section>
 
       {/* Third Scroll Section */}
-      <section className="py-6 relative z-10 max-w-7xl mx-auto">
+      <section className="pt-0 pb-0 relative z-10 max-w-7xl mx-auto">
         <div className="px-6 mb-4">
           <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-1">Tendencias Exclusivas</h2>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#FF8C42]">Novedades Premium</p>
