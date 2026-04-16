@@ -59,6 +59,48 @@ export default function App() {
     });
     return () => unsubscribe();
   }, []);
+
+  // Smooth Horizontal Scroll Parallax Effect
+  useEffect(() => {
+    const containers = document.querySelectorAll('.scroll-container');
+    
+    const handleScroll = (e: Event) => {
+      const container = e.currentTarget as Element;
+      const containerRect = container.getBoundingClientRect();
+      // Calculate dynamic center
+      const containerCenter = containerRect.left + containerRect.width / 2;
+      
+      requestAnimationFrame(() => {
+        Array.from(container.children).forEach((child: any) => {
+          const childRect = child.getBoundingClientRect();
+          const childCenter = childRect.left + childRect.width / 2;
+          const distance = Math.abs(containerCenter - childCenter);
+          
+          // Interpolate distance. When distance is 0 -> normalized is 0 (Center)
+          let normalizedDist = distance / (containerRect.width / 1.5);
+          if (normalizedDist > 1) normalizedDist = 1;
+          
+          // Dynamically scale from 0.9 (edges) to 1.0 (center)
+          const scale = 0.9 + (1 - normalizedDist) * 0.1;
+          child.style.transform = `scale(${scale})`;
+          child.style.transition = 'none'; // Crucial: removes lag so JS handles frames
+        });
+      });
+    };
+
+    containers.forEach(container => {
+      container.addEventListener('scroll', handleScroll, { passive: true });
+      // Trigger evaluation on load so side cards shrink instantly
+      const simulatedEvent = { currentTarget: container } as unknown as Event;
+      handleScroll(simulatedEvent);
+    });
+
+    return () => {
+      containers.forEach(container => {
+        container.removeEventListener('scroll', handleScroll);
+      });
+    };
+  }, []);
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
