@@ -52,6 +52,13 @@ export default function App() {
   // QR Modal
   const [qrText, setQrText] = useState('');
   const [qrImageSrc, setQrImageSrc] = useState('');
+  const [qrColor, setQrColor] = useState('#000000');
+  const [qrLogoSrc, setQrLogoSrc] = useState<string | null>(null);
+
+  // Remove BG Modal
+  const [bgImageSrc, setBgImageSrc] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [bgResultSrc, setBgResultSrc] = useState<string | null>(null);
 
   useEffect(() => {
     // Definimos isStandalone de forma global para usarlo en el renderizado
@@ -135,7 +142,93 @@ export default function App() {
 
   const generateQr = () => {
     if (!qrText.trim()) return;
-    setQrImageSrc(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrText)}`);
+    const colorHex = qrColor.replace('#', '');
+    setQrImageSrc(`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(qrText)}&color=${colorHex}&bgcolor=ffffff&margin=10`);
+  };
+
+  const handleQrLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setQrLogoSrc(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const downloadQr = async () => {
+    if (!qrImageSrc) return;
+    
+    // Create a canvas to merge QR code and logo if present
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 500;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const qrImg = new Image();
+    qrImg.crossOrigin = 'Anonymous';
+    qrImg.src = qrImageSrc;
+
+    qrImg.onload = () => {
+      ctx.drawImage(qrImg, 0, 0, 500, 500);
+
+      if (qrLogoSrc) {
+        const logoImg = new Image();
+        logoImg.src = qrLogoSrc;
+        logoImg.onload = () => {
+          // Draw logo in the center
+          const logoSize = 100;
+          const x = (500 - logoSize) / 2;
+          const y = (500 - logoSize) / 2;
+          
+          // White background for logo to ensure it's readable
+          ctx.fillStyle = 'white';
+          ctx.fillRect(x - 5, y - 5, logoSize + 10, logoSize + 10);
+          ctx.drawImage(logoImg, x, y, logoSize, logoSize);
+          
+          triggerDownload(canvas.toDataURL('image/png'), 'UltraGraphic-QR.png');
+        };
+      } else {
+        triggerDownload(canvas.toDataURL('image/png'), 'UltraGraphic-QR.png');
+      }
+    };
+  };
+
+  const triggerDownload = (dataUrl: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // --- Remove Background Handlers ---
+  const handleBgImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setBgImageSrc(event.target?.result as string);
+        setBgResultSrc(null); // Reset result
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const simulateRemoveBg = () => {
+    if (!bgImageSrc) return;
+    setIsScanning(true);
+    
+    // Simular llamada a API por 3 segundos
+    setTimeout(() => {
+      setIsScanning(false);
+      // Por ahora, como es simulado y falta la API real, 
+      // mostramos la misma imagen como "resultado" o aplicamos un filtro CSS
+      setBgResultSrc(bgImageSrc);
+    }, 3000);
   };
 
   const calculatePrice = () => {
@@ -620,45 +713,150 @@ export default function App() {
         </div>
       )}
 
-      {/* QR Modal */}
+      {/* QR Modal - Fullscreen */}
       {activeModal === 'qr' && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 pointer-events-none">
-          <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl animate-fade-in-up pointer-events-auto">
-            <div className="p-6 border-b border-white/5 relative">
-              <h3 className="font-display font-bold text-white text-xl flex items-center gap-2"><IconQr className="text-primary" /> Generador QR</h3>
-              <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white"><IconX size={20} /></button>
+        <div className="fixed inset-0 z-[300] bg-[#111] flex flex-col md:flex-row overflow-hidden animate-fade-in-up pointer-events-auto">
+          {/* Controls Side */}
+          <div className="w-full md:w-1/3 bg-[#0a0a0a] p-8 flex flex-col h-full overflow-y-auto border-r border-white/10">
+            <div className="flex justify-between items-center mb-10">
+              <h3 className="font-display font-bold text-white text-2xl flex items-center gap-3"><IconQr className="text-primary" size={28} /> Generador QR</h3>
+              <button onClick={() => setActiveModal(null)} className="text-white/40 hover:text-white p-2 bg-white/5 rounded-full"><IconX size={20} /></button>
             </div>
-            <div className="p-8 space-y-6">
-              <input type="text" placeholder="https://ejemplo.com" value={qrText} onChange={e => setQrText(e.target.value)} onKeyDown={e => e.key === 'Enter' && generateQr()}
-                className="w-full bg-white/5 border border-white/10 focus:border-primary/50 outline-none rounded-xl py-4 px-5 text-white transition-colors text-sm" />
-              <button onClick={generateQr} className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-4 rounded-xl transition-all">
-                Generar QR
-              </button>
-              {qrImageSrc && (
-                <div className="flex flex-col items-center mt-6 p-6 bg-white rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                  <img src={qrImageSrc} className="w-48 h-48 object-contain" alt="QR Code" />
+
+            <div className="space-y-8 flex-1">
+              <div>
+                <label className="block text-sm font-medium text-white/60 mb-2">URL o Texto del QR</label>
+                <input type="text" placeholder="https://ejemplo.com" value={qrText} onChange={e => setQrText(e.target.value)} onKeyDown={e => e.key === 'Enter' && generateQr()}
+                  className="w-full bg-white/5 border border-white/10 focus:border-primary outline-none rounded-xl py-4 px-5 text-white transition-colors" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/60 mb-2">Color del Código</label>
+                <div className="flex items-center gap-4">
+                  <input type="color" value={qrColor} onChange={e => setQrColor(e.target.value)} className="w-14 h-14 rounded-xl cursor-pointer bg-transparent border-0 p-0" />
+                  <span className="text-white/80 font-mono bg-white/5 px-4 py-2 rounded-lg">{qrColor.toUpperCase()}</span>
                 </div>
-              )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/60 mb-2">Añadir Logo Central (Opcional)</label>
+                <label className="flex items-center justify-center w-full h-24 border-2 border-dashed border-white/20 hover:border-primary/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors overflow-hidden group relative">
+                  <input type="file" accept="image/*" onChange={handleQrLogoUpload} className="hidden" />
+                  {qrLogoSrc ? (
+                    <div className="flex items-center gap-4">
+                       <img src={qrLogoSrc} className="w-12 h-12 object-contain bg-white rounded-md p-1" />
+                       <span className="text-primary font-medium text-sm group-hover:underline">Cambiar logo</span>
+                    </div>
+                  ) : (
+                    <span className="text-white/50 text-sm font-medium group-hover:text-primary transition-colors flex items-center gap-2">
+                      <IconDownload size={18} /> Subir desde dispositivo
+                    </span>
+                  )}
+                </label>
+              </div>
             </div>
+
+            <div className="mt-8 pt-8 border-t border-white/10">
+              <button onClick={generateQr} className="w-full bg-white hover:bg-white/90 text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                Generar Código QR
+              </button>
+            </div>
+          </div>
+
+          {/* Preview Side */}
+          <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] relative">
+            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white p-2 bg-black/50 rounded-full md:hidden z-10"><IconX size={20} /></button>
+            
+            {qrImageSrc ? (
+              <div className="flex flex-col items-center animate-fade-in-up">
+                <div className="relative p-6 bg-white rounded-3xl shadow-[0_0_50px_rgba(242,125,38,0.2)] mb-8 group">
+                  <img src={qrImageSrc} className="w-64 h-64 md:w-80 md:h-80 object-contain" alt="QR Code Result" />
+                  {qrLogoSrc && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-lg shadow-lg">
+                      <img src={qrLogoSrc} className="w-16 h-16 md:w-20 md:h-20 object-contain" />
+                    </div>
+                  )}
+                </div>
+                
+                <button onClick={downloadQr} className="bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(242,125,38,0.4)] hover:shadow-[0_0_30px_rgba(242,125,38,0.6)] hover:scale-105 transition-all flex items-center gap-3 text-lg">
+                  <IconDownload size={22} /> Descargar Alta Calidad
+                </button>
+              </div>
+            ) : (
+              <div className="text-center opacity-40 flex flex-col items-center">
+                <IconQr size={100} className="mb-6 opacity-20" />
+                <p className="text-xl font-medium">Ingresa un texto y presiona Generar</p>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Remove BG Modal */}
+      {/* Remove BG Modal - Fullscreen Elegant */}
       {activeModal === 'removeBg' && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 pointer-events-none">
-          <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-sm flex flex-col items-center text-center p-8 animate-fade-in-up pointer-events-auto relative">
-            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-white/40 hover:text-white"><IconX size={20} /></button>
-            <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(242,125,38,0.2)]">
-              <IconWand size={32} className="text-primary" />
+        <div className="fixed inset-0 z-[300] bg-[#111] flex flex-col md:flex-row overflow-hidden animate-fade-in-up pointer-events-auto">
+          {/* Controls Side */}
+          <div className="w-full md:w-1/3 bg-[#0a0a0a] p-8 flex flex-col h-full overflow-y-auto border-r border-white/10 relative">
+            <button onClick={() => {setActiveModal(null); setBgImageSrc(null); setBgResultSrc(null);}} className="absolute top-6 right-6 text-white/40 hover:text-white p-2 bg-white/5 rounded-full"><IconX size={20} /></button>
+            
+            <div className="mb-10">
+              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(242,125,38,0.2)]">
+                <IconWand size={28} className="text-primary" />
+              </div>
+              <h3 className="font-display font-bold text-3xl text-white mb-3">Magic Eraser</h3>
+              <p className="text-sm text-white/50 leading-relaxed">
+                Elimina el fondo de cualquier imagen al instante usando Inteligencia Artificial.
+              </p>
             </div>
-            <h3 className="font-display font-bold text-2xl text-white mb-3">Magic Eraser</h3>
-            <p className="text-sm text-white/50 mb-8 leading-relaxed">
-              Sube cualquier imagen para remover el fondo al instante. <br />(Función Pro, requiere integración API habilitada).
-            </p>
-            <button className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)] hover:shadow-[0_0_30px_rgba(242,125,38,0.6)] transition-all">
-              Subir Imagen
-            </button>
+
+            <div className="flex-1 flex flex-col justify-center">
+              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/20 hover:border-primary/50 rounded-2xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors group relative overflow-hidden">
+                <input type="file" accept="image/*" onChange={handleBgImageUpload} className="hidden" />
+                <div className="flex flex-col items-center gap-3">
+                  <IconDownload size={32} className="text-white/30 group-hover:text-primary transition-colors" />
+                  <span className="text-white/70 font-medium group-hover:text-white">Seleccionar Imagen</span>
+                  <span className="text-xs text-white/40">PNG, JPG o WEBP</span>
+                </div>
+              </label>
+
+              {bgImageSrc && !bgResultSrc && (
+                <button onClick={simulateRemoveBg} disabled={isScanning} className={`mt-6 w-full ${isScanning ? 'bg-primary/50 cursor-wait' : 'bg-white hover:bg-white/90'} text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] flex justify-center items-center gap-2`}>
+                  {isScanning ? (
+                    <><div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div> Procesando...</>
+                  ) : (
+                    <><IconWand size={20} /> Eliminar Fondo</>
+                  )}
+                </button>
+              )}
+
+              {bgResultSrc && (
+                <button onClick={() => triggerDownload(bgResultSrc, 'UltraGraphic-NoBg.png')} className="mt-6 w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)] hover:shadow-[0_0_30px_rgba(242,125,38,0.6)] hover:scale-[1.02] transition-all flex justify-center items-center gap-2">
+                  <IconDownload size={20} /> Descargar Resultado
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Preview Side */}
+          <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGgyMHYyMEgwVjB6bTEwIDEwaDEwdjEwSDEwVjEweiIgZmlsbD0iIzIyMiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+')]">
+            {bgImageSrc ? (
+              <div className="relative max-w-full max-h-full rounded-2xl overflow-hidden shadow-2xl animate-fade-in-up">
+                <img src={bgResultSrc || bgImageSrc} className="max-w-full max-h-[80vh] object-contain relative z-10" alt="Preview" />
+                
+                {isScanning && (
+                  <>
+                    <div className="absolute inset-0 bg-primary/20 z-20 mix-blend-overlay"></div>
+                    {/* Scanner line */}
+                    <div className="absolute left-0 right-0 h-1 bg-white shadow-[0_0_15px_#f27d26,0_0_30px_#f27d26] z-30 animate-scan"></div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="text-center opacity-30 flex flex-col items-center">
+                <IconWand size={80} className="mb-4 opacity-20" />
+                <p className="text-xl font-medium">Sube una imagen para previsualizar</p>
+              </div>
+            )}
           </div>
         </div>
       )}
