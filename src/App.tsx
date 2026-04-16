@@ -27,6 +27,9 @@ const IconUser = ({ size = 24, className = "" }) => (
 const IconX = ({ size = 24, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
 );
+const IconDownload = ({ size = 24, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+);
 const IconCalculator = ({ size = 20, className = "" }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg>
 );
@@ -512,7 +515,7 @@ export default function App() {
 
       {/* Floating Bottom Nav */}
       <div className="fixed bottom-6 left-0 right-0 px-6 z-50 flex justify-center pointer-events-none animate-fade-in-up transition-transform duration-700">
-        <nav className="bg-black/60 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-full px-8 py-3 flex gap-12 md:gap-16 items-center pointer-events-auto hover:bg-black/80 hover:border-white/20 transition-all cursor-pointer">
+        <nav className="bg-black/60 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] rounded-full px-8 py-3 flex gap-8 md:gap-12 items-center pointer-events-auto hover:bg-black/80 hover:border-white/20 transition-all cursor-pointer">
           <button onClick={() => setActiveTab('home')} className={`relative p-2 transition-all duration-300 ${activeTab === 'home' ? 'text-primary scale-110' : 'text-white/40 hover:text-white/80 hover:scale-105'}`}>
             <IconHome size={24} className={activeTab === 'home' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
             {activeTab === 'home' && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(242,125,38,1)]" />}
@@ -525,6 +528,13 @@ export default function App() {
           <button onClick={() => setActiveModal('qr')} className={`relative p-2 transition-all duration-300 ${activeModal === 'qr' ? 'text-primary scale-110' : 'text-white/40 hover:text-white/80 hover:scale-105'}`}>
             <IconQr size={24} className={activeModal === 'qr' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
           </button>
+
+          {/* Install PWA Button - Shown if not standalone */}
+          {!(window.matchMedia('(display-mode: standalone)').matches || ('standalone' in window.navigator && (window.navigator as any).standalone)) && (
+            <button onClick={() => setShowInstallModal(true)} className="relative p-2 transition-all duration-300 text-white/40 hover:text-primary hover:scale-105">
+              <IconDownload size={24} />
+            </button>
+          )}
         </nav>
       </div>
 
