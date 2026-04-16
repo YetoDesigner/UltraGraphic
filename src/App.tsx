@@ -60,46 +60,60 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Smooth Horizontal Scroll Parallax Effect
+  // High-Performance Smooth Horizontal Scroll Parallax Effect
   useEffect(() => {
     const containers = document.querySelectorAll('.scroll-container');
     
-    const handleScroll = (e: Event) => {
-      const container = e.currentTarget as Element;
-      const containerRect = container.getBoundingClientRect();
-      // Calculate dynamic center
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      
-      requestAnimationFrame(() => {
-        Array.from(container.children).forEach((child: any) => {
-          const childRect = child.getBoundingClientRect();
-          const childCenter = childRect.left + childRect.width / 2;
-          const distance = Math.abs(containerCenter - childCenter);
-          
-          // Interpolate distance. When distance is 0 -> normalized is 0 (Center)
-          let normalizedDist = distance / (containerRect.width / 1.5);
-          if (normalizedDist > 1) normalizedDist = 1;
-          
-          // Dynamically scale from 0.85 (edges) to 1.0 (center)
-          const scale = 0.85 + (1 - normalizedDist) * 0.15;
-          child.style.transform = `scale(${scale})`;
-          child.style.zIndex = Math.round(100 - normalizedDist * 100).toString();
-          child.style.position = 'relative'; // ensure z-index applies
-          child.style.transition = 'none'; // Crucial: removes lag so JS handles frames
-        });
-      });
-    };
-
     containers.forEach(container => {
+      let containerWidth = container.clientWidth;
+      let childrenData = Array.from(container.children).map((child: any) => ({
+        el: child,
+        center: child.offsetLeft + child.clientWidth / 2
+      }));
+
+      const handleScroll = () => {
+        const scrollCenter = container.scrollLeft + containerWidth / 2;
+        
+        requestAnimationFrame(() => {
+          childrenData.forEach(({ el, center }) => {
+            const distance = Math.abs(scrollCenter - center);
+            let normalizedDist = distance / (containerWidth / 1.5);
+            if (normalizedDist > 1) normalizedDist = 1;
+            
+            const scale = 0.85 + (1 - normalizedDist) * 0.15;
+            el.style.transform = `scale(${scale})`;
+            el.style.zIndex = Math.round(100 - normalizedDist * 100).toString();
+            el.style.position = 'relative';
+            el.style.transition = 'none';
+          });
+        });
+      };
+
+      const handleResize = () => {
+        containerWidth = container.clientWidth;
+        childrenData = Array.from(container.children).map((child: any) => ({
+          el: child,
+          center: child.offsetLeft + child.clientWidth / 2
+        }));
+        handleScroll();
+      };
+
       container.addEventListener('scroll', handleScroll, { passive: true });
-      // Trigger evaluation on load so side cards shrink instantly
-      const simulatedEvent = { currentTarget: container } as unknown as Event;
-      handleScroll(simulatedEvent);
+      window.addEventListener('resize', handleResize);
+      
+      // Initial calculation
+      setTimeout(handleResize, 100);
+
+      // Attach cleanup to container
+      (container as any)._cleanup = () => {
+        container.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleResize);
+      };
     });
 
     return () => {
       containers.forEach(container => {
-        container.removeEventListener('scroll', handleScroll);
+        if ((container as any)._cleanup) (container as any)._cleanup();
       });
     };
   }, []);
