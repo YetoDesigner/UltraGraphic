@@ -733,26 +733,40 @@ export default function App() {
               <div>
                 <label className="block text-sm font-medium text-white/60 mb-2">Color del Código</label>
                 <div className="flex items-center gap-4">
-                  <input type="color" value={qrColor} onChange={e => setQrColor(e.target.value)} className="w-14 h-14 rounded-xl cursor-pointer bg-transparent border-0 p-0" />
+                  <input type="color" value={qrColor} onChange={e => {
+                    setQrColor(e.target.value);
+                    if (qrText.trim()) {
+                      const colorHex = e.target.value.replace('#', '');
+                      setQrImageSrc(`https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(qrText)}&color=${colorHex}&bgcolor=ffffff&margin=10`);
+                    }
+                  }} className="w-14 h-14 rounded-xl cursor-pointer bg-transparent border-0 p-0" />
                   <span className="text-white/80 font-mono bg-white/5 px-4 py-2 rounded-lg">{qrColor.toUpperCase()}</span>
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-white/60 mb-2">Añadir Logo Central (Opcional)</label>
-                <label className="flex items-center justify-center w-full h-24 border-2 border-dashed border-white/20 hover:border-primary/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors overflow-hidden group relative">
-                  <input type="file" accept="image/*" onChange={handleQrLogoUpload} className="hidden" />
-                  {qrLogoSrc ? (
-                    <div className="flex items-center gap-4">
-                       <img src={qrLogoSrc} className="w-12 h-12 object-contain bg-white rounded-md p-1" />
-                       <span className="text-primary font-medium text-sm group-hover:underline">Cambiar logo</span>
-                    </div>
-                  ) : (
-                    <span className="text-white/50 text-sm font-medium group-hover:text-primary transition-colors flex items-center gap-2">
-                      <IconDownload size={18} /> Subir desde dispositivo
-                    </span>
+                <div className="flex items-center gap-3">
+                  <label className="flex-1 flex items-center justify-center h-24 border-2 border-dashed border-white/20 hover:border-primary/50 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors overflow-hidden group relative">
+                    <input type="file" accept="image/*" onChange={handleQrLogoUpload} className="hidden" />
+                    {qrLogoSrc ? (
+                      <div className="flex items-center gap-4">
+                         <img src={qrLogoSrc} className="w-12 h-12 object-contain bg-white rounded-md p-1" />
+                         <span className="text-primary font-medium text-sm group-hover:underline">Cambiar logo</span>
+                      </div>
+                    ) : (
+                      <span className="text-white/50 text-sm font-medium group-hover:text-primary transition-colors flex items-center gap-2">
+                        <IconDownload size={18} /> Subir desde dispositivo
+                      </span>
+                    )}
+                  </label>
+                  {qrLogoSrc && (
+                    <button onClick={(e) => { e.preventDefault(); setQrLogoSrc(null); }} className="h-24 px-4 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 hover:border-red-500/40 rounded-xl transition-all flex flex-col items-center justify-center gap-1">
+                      <IconX size={24} />
+                      <span className="text-xs font-medium">Quitar</span>
+                    </button>
                   )}
-                </label>
+                </div>
               </div>
             </div>
 
@@ -845,9 +859,9 @@ export default function App() {
                 
                 {isScanning && (
                   <>
-                    <div className="absolute inset-0 bg-primary/20 z-20 mix-blend-overlay"></div>
+                    <div className="absolute inset-0 bg-black/40 z-20"></div>
                     {/* Scanner line */}
-                    <div className="absolute left-0 right-0 h-1 bg-white shadow-[0_0_15px_#f27d26,0_0_30px_#f27d26] z-30 animate-scan"></div>
+                    <div className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent to-primary/50 border-b-2 border-primary shadow-[0_10px_30px_rgba(242,125,38,0.8)] z-30 animate-scan"></div>
                   </>
                 )}
               </div>
