@@ -60,63 +60,8 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // High-Performance Smooth Horizontal Scroll Parallax Effect
-  useEffect(() => {
-    const containers = document.querySelectorAll('.scroll-container');
-    
-    containers.forEach(container => {
-      let containerWidth = container.clientWidth;
-      let childrenData = Array.from(container.children).map((child: any) => ({
-        el: child,
-        center: child.offsetLeft + child.clientWidth / 2
-      }));
+  // Fallback to pure native CSS scroll snapping for 120Hz maximum performance.
 
-      const handleScroll = () => {
-        const scrollCenter = container.scrollLeft + containerWidth / 2;
-        
-        requestAnimationFrame(() => {
-          childrenData.forEach(({ el, center }) => {
-            const distance = Math.abs(scrollCenter - center);
-            let normalizedDist = distance / (containerWidth / 1.5);
-            if (normalizedDist > 1) normalizedDist = 1;
-            
-            const scale = 0.85 + (1 - normalizedDist) * 0.15;
-            el.style.transform = `scale(${scale})`;
-            el.style.zIndex = Math.round(100 - normalizedDist * 100).toString();
-            el.style.position = 'relative';
-            el.style.transition = 'none';
-          });
-        });
-      };
-
-      const handleResize = () => {
-        containerWidth = container.clientWidth;
-        childrenData = Array.from(container.children).map((child: any) => ({
-          el: child,
-          center: child.offsetLeft + child.clientWidth / 2
-        }));
-        handleScroll();
-      };
-
-      container.addEventListener('scroll', handleScroll, { passive: true });
-      window.addEventListener('resize', handleResize);
-      
-      // Initial calculation
-      setTimeout(handleResize, 100);
-
-      // Attach cleanup to container
-      (container as any)._cleanup = () => {
-        container.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('resize', handleResize);
-      };
-    });
-
-    return () => {
-      containers.forEach(container => {
-        if ((container as any)._cleanup) (container as any)._cleanup();
-      });
-    };
-  }, []);
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
@@ -237,7 +182,7 @@ export default function App() {
           </div>
         </div>
         
-        <div className="flex overflow-x-auto no-scrollbar -space-x-4 md:-space-x-8 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
+        <div className="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
           {/* Card 1 */}
           <div onClick={() => openProduct('Avisos Acrílico 3D', 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?q=80&w=800&auto=format&fit=crop', false)}
                className="relative min-w-[350px] md:min-w-[500px] h-[480px] md:h-[550px] rounded-[2.5rem] overflow-hidden group bg-[#111] shadow-[0_10px_40px_rgba(0,0,0,0.5)] snap-center shrink-0 cursor-pointer border border-white/10 hover:border-primary/30 transition-colors">
@@ -341,7 +286,7 @@ export default function App() {
           <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-1">Nuevos Lanzamientos</h2>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Servicios Pro</p>
         </div>
-        <div className="flex overflow-x-auto no-scrollbar -space-x-4 md:-space-x-8 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
+        <div className="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
           <div onClick={() => openProduct('Tarjetas Elite', 'https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop', false)} 
                className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1589041127530-ebab8790089f?q=80&w=800&auto=format&fit=crop" alt="Cards" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -423,7 +368,7 @@ export default function App() {
           <h2 className="text-xl md:text-2xl font-display font-bold text-white mb-1">Tendencias Exclusivas</h2>
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#FF8C42]">Novedades Premium</p>
         </div>
-        <div className="flex overflow-x-auto no-scrollbar -space-x-4 md:-space-x-8 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
+        <div className="flex overflow-x-auto no-scrollbar gap-4 md:gap-6 px-6 pb-8 snap-x snap-mandatory scroll-container py-2">
           <div onClick={() => openProduct('Brochures Premium', 'https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=800&auto=format&fit=crop', false)} 
                className="relative min-w-[380px] md:min-w-[500px] h-[350px] md:h-[420px] rounded-[2rem] overflow-hidden group border border-white/10 bg-card cursor-pointer shrink-0 snap-center shadow-2xl">
             <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=800&auto=format&fit=crop" alt="Brochures" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
