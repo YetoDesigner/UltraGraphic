@@ -59,49 +59,6 @@ export default function App() {
     });
     return () => unsubscribe();
   }, []);
-
-  // Horizontal Scroll Scale Effect
-  useEffect(() => {
-    const containers = document.querySelectorAll('.scroll-container');
-    
-    const updateScale = (container: Element) => {
-      const containerRect = container.getBoundingClientRect();
-      const containerCenter = containerRect.left + containerRect.width / 2;
-      
-      Array.from(container.children).forEach((child: any) => {
-        const childRect = child.getBoundingClientRect();
-        const childCenter = childRect.left + childRect.width / 2;
-        const distance = Math.abs(containerCenter - childCenter);
-        
-        if (distance < childRect.width / 1.5) {
-          child.style.transform = 'scale(1)';
-          child.style.opacity = '1';
-        } else {
-          child.style.transform = 'scale(0.85)';
-          child.style.opacity = '0.5';
-        }
-      });
-    };
-
-    const handleScroll = (e: Event) => {
-      requestAnimationFrame(() => updateScale(e.currentTarget as Element));
-    };
-
-    containers.forEach(container => {
-      container.addEventListener('scroll', handleScroll, { passive: true });
-      Array.from(container.children).forEach((child: any) => {
-        child.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease';
-      });
-      // Initial scale calculation delay to let render finish
-      setTimeout(() => updateScale(container), 100);
-    });
-
-    return () => {
-      containers.forEach(container => {
-        container.removeEventListener('scroll', handleScroll);
-      });
-    };
-  }, []);
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
