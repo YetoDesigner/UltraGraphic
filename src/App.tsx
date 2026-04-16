@@ -95,10 +95,6 @@ export default function App() {
       checkAndShowPwaModal();
     });
 
-    if (detectOS() === 'ios') {
-      checkAndShowPwaModal();
-    }
-
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setClientData({
@@ -542,8 +538,8 @@ export default function App() {
             <IconQr size={24} className={activeModal === 'qr' ? "drop-shadow-[0_0_8px_rgba(242,125,38,0.8)]" : ""} />
           </button>
 
-          {/* Install PWA Button - Shown if not standalone */}
-          {!isStandalone && (
+          {/* Install PWA Button - Shown if not standalone and NOT iOS */}
+          {!isStandalone && deviceOS !== 'ios' && (
             <button onClick={() => setShowInstallModal(true)} className="relative p-2 transition-all duration-300 text-white/40 hover:text-primary hover:scale-105">
               <IconDownload size={24} />
             </button>
@@ -698,8 +694,8 @@ export default function App() {
         </div>
       )}
 
-      {/* PWA Install Modal */}
-      {showInstallModal && (
+      {/* PWA Install Modal (Only for Android/Desktop) */}
+      {showInstallModal && deviceOS !== 'ios' && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md pointer-events-auto">
           <div className="bg-[#111] border border-white/10 rounded-3xl w-full max-w-sm p-8 text-center shadow-2xl relative animate-fade-in-up">
             <button onClick={() => setShowInstallModal(false)} className="absolute top-5 right-5 text-white/50 hover:text-white">
@@ -711,34 +707,18 @@ export default function App() {
             <h3 className="font-display text-2xl font-bold text-white mb-3">Instala Ultra Graphic</h3>
             <p className="text-sm text-white/60 mb-8">Instala Ultra Graphic en tu celular, y resive el mejor contenido publicitario para tu negocio.</p>
             
-            {deviceOS === 'ios' ? (
-              <div className="bg-white/5 p-4 rounded-xl border border-white/10 mb-4">
-                <p className="text-sm text-white font-medium mb-3">Para instalar en tu iPhone o iPad:</p>
-                <ol className="text-left text-xs text-white/70 space-y-3">
-                  <li className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0">1</span>
-                    <span>Toca el botón <strong className="text-white">Compartir</strong> <svg className="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> en la barra inferior</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0">2</span>
-                    <span>Selecciona <strong className="text-white">"Agregar a inicio"</strong> <svg className="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></span>
-                  </li>
-                </ol>
-              </div>
-            ) : (
-              <button onClick={async () => {
-                if (deferredPrompt) {
-                  deferredPrompt.prompt();
-                  const { outcome } = await deferredPrompt.userChoice;
-                  if (outcome === 'accepted') {
-                    setDeferredPrompt(null);
-                    setShowInstallModal(false);
-                  }
+            <button onClick={async () => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                  setDeferredPrompt(null);
+                  setShowInstallModal(false);
                 }
-              }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
-                Instalar Ahora
-              </button>
-            )}
+              }
+            }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
+              Instalar Ahora
+            </button>
           </div>
         </div>
       )}
