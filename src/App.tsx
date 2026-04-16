@@ -38,6 +38,8 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Product Modal Data
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -50,7 +52,24 @@ export default function App() {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      // Opcional: mostrar automáticamente el modal en Android/Desktop
+      if (!sessionStorage.getItem('pwaPromptShown')) {
+        setShowInstallModal(true);
+        sessionStorage.setItem('pwaPromptShown', 'true');
+      }
     });
+
+    // Detectar iOS para PWA
+    const isIos = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      return /iphone|ipad|ipod/.test(userAgent);
+    };
+    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator as any).standalone;
+
+    if (isIos() && !isInStandaloneMode() && !sessionStorage.getItem('pwaPromptShown')) {
+      setShowInstallModal(true);
+      sessionStorage.setItem('pwaPromptShown', 'true');
+    }
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -594,14 +613,30 @@ export default function App() {
           <div className="bg-[#111] border-t md:border border-white/10 rounded-t-[2.5rem] md:rounded-[2.5rem] w-full max-w-5xl h-[85vh] md:h-[70vh] flex flex-col md:flex-row overflow-hidden shadow-2xl pointer-events-auto animate-fade-in-up">
 
             {/* Close Button */}
-            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white z-50 border border-white/10 hover:bg-white/10 transition-colors">
+            <button onClick={() => {setActiveModal(null); setCurrentImageIndex(0);}} className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white z-50 border border-white/10 hover:bg-white/10 transition-colors">
               <IconX size={20} />
             </button>
 
-            {/* Image Side */}
-            <div className="w-full md:w-1/2 h-[40vh] md:h-full relative overflow-hidden bg-black shrink-0">
-              <img src={selectedProduct.img1} alt={selectedProduct.title} className="w-full h-full object-cover" />
+            {/* Image Side - Carousel */}
+            <div className="w-full md:w-1/2 h-[40vh] md:h-full relative overflow-hidden bg-black shrink-0 group">
+              <img 
+                src={[selectedProduct.img1, 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop', 'https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=800&auto=format&fit=crop'][currentImageIndex]} 
+                alt={selectedProduct.title} 
+                className="w-full h-full object-cover transition-all duration-500" 
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent md:bg-gradient-to-r" />
+              
+              {/* Carousel Controls */}
+              <button onClick={() => setCurrentImageIndex(prev => prev === 0 ? 2 : prev - 1)} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white"><IconArrowRight className="rotate-180" size={20} /></button>
+              <button onClick={() => setCurrentImageIndex(prev => prev === 2 ? 0 : prev + 1)} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-white"><IconArrowRight size={20} /></button>
+              
+              {/* Carousel Dots */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {[0, 1, 2].map(idx => (
+                  <div key={idx} onClick={() => setCurrentImageIndex(idx)} className={`w-2 h-2 rounded-full cursor-pointer transition-all ${currentImageIndex === idx ? 'bg-primary w-4' : 'bg-white/50'}`} />
+                ))}
+              </div>
+
               <div className="absolute top-6 left-6">
                 <span className="backdrop-blur-md bg-white/10 text-[10px] font-bold uppercase tracking-[0.2em] text-white px-4 py-2 rounded-full border border-white/20 shadow-lg">Ultra PRO</span>
               </div>
@@ -619,10 +654,41 @@ export default function App() {
               <button onClick={() => window.open(`https://wa.me/573027502695?text=Hola, quiero agendar mi: ${selectedProduct.title}`, '_blank')}
                 className="mt-auto w-full group relative flex justify-center items-center gap-3 bg-gradient-to-r from-[#F27D26] to-[#E55A00] text-white font-bold py-5 px-8 rounded-full shadow-[0_10px_30px_rgba(242,125,38,0.4)] hover:shadow-[0_15px_40px_rgba(242,125,38,0.6)] hover:scale-[1.02] active:scale-95 transition-all overflow-hidden shrink-0">
                 <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-out" />
-                <span className="relative z-10 text-lg uppercase tracking-wider">Enviar Mensaje</span>
+                <span className="relative z-10 text-lg uppercase tracking-wider">Comprar por WhatsApp</span>
                 <svg className="w-6 h-6 relative z-10" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.436-9.88 9.88-9.88 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.88-9.881 9.88zm8.508-18.395A11.859 11.859 0 0012.052 0C5.461 0 .092 5.36.09 11.956c0 2.106.55 4.161 1.594 5.975L0 24l6.216-1.63a11.865 11.865 0 005.836 1.517h.005c6.589 0 11.958-5.36 11.961-11.956a11.86 11.86 0 00-3.498-8.487z" /></svg>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PWA Install Modal */}
+      {showInstallModal && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md pointer-events-auto">
+          <div className="bg-[#111] border border-white/10 rounded-3xl w-full max-w-sm p-8 text-center shadow-2xl relative animate-fade-in-up">
+            <button onClick={() => setShowInstallModal(false)} className="absolute top-5 right-5 text-white/50 hover:text-white">
+              <IconX size={20} />
+            </button>
+            <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-tr from-primary to-yellow-500 rounded-2xl p-[2px] shadow-[0_0_20px_rgba(242,125,38,0.4)]">
+              <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png" className="w-full h-full rounded-2xl object-cover bg-black" />
+            </div>
+            <h3 className="font-display text-2xl font-bold text-white mb-3">Instala Ultra Graphic</h3>
+            <p className="text-sm text-white/60 mb-8">Instala Ultra Graphic en tu celular, y resive el mejor contenido publicitario para tu negocio.</p>
+            <button onClick={async () => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                  setDeferredPrompt(null);
+                  setShowInstallModal(false);
+                }
+              } else {
+                // Para iOS
+                alert('Para instalar en iOS: Toca el botón Compartir y luego "Agregar a inicio".');
+              }
+            }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
+              Instalar Ahora
+            </button>
           </div>
         </div>
       )}
