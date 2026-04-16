@@ -49,14 +49,28 @@ export default function App() {
   const [qrImageSrc, setQrImageSrc] = useState('');
 
   useEffect(() => {
+    // Control de modal PWA
+    const checkAndShowPwaModal = () => {
+      // Si la app ya está instalada (standalone), no hacemos nada
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || ('standalone' in window.navigator && (window.navigator as any).standalone);
+      if (isStandalone) return;
+
+      const pwaViews = parseInt(sessionStorage.getItem('pwaPromptViews') || '0', 10);
+      
+      // Mostrar máximo 2 veces por sesión
+      if (pwaViews < 2) {
+        // Un pequeño retraso para no ser tan invasivo al inicio
+        setTimeout(() => {
+          setShowInstallModal(true);
+          sessionStorage.setItem('pwaPromptViews', (pwaViews + 1).toString());
+        }, 3000); // Aparece a los 3 segundos
+      }
+    };
+
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      // Opcional: mostrar automáticamente el modal en Android/Desktop
-      if (!sessionStorage.getItem('pwaPromptShown')) {
-        setShowInstallModal(true);
-        sessionStorage.setItem('pwaPromptShown', 'true');
-      }
+      checkAndShowPwaModal();
     });
 
     // Detectar iOS para PWA
@@ -64,11 +78,9 @@ export default function App() {
       const userAgent = window.navigator.userAgent.toLowerCase();
       return /iphone|ipad|ipod/.test(userAgent);
     };
-    const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator as any).standalone;
 
-    if (isIos() && !isInStandaloneMode() && !sessionStorage.getItem('pwaPromptShown')) {
-      setShowInstallModal(true);
-      sessionStorage.setItem('pwaPromptShown', 'true');
+    if (isIos()) {
+      checkAndShowPwaModal();
     }
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -138,9 +150,10 @@ export default function App() {
     <div className="min-h-screen bg-[#050505] text-white font-sans relative overflow-x-hidden selection:bg-primary/30 pb-32">
 
       {/* Background glow effects */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full mix-blend-screen opacity-50" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-yellow-600/10 blur-[150px] rounded-full mix-blend-screen opacity-50" />
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] bg-primary/30 blur-[100px] md:blur-[120px] rounded-full mix-blend-screen opacity-50 animate-blob1" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[70vw] h-[70vw] md:w-[50vw] md:h-[50vw] bg-yellow-600/20 blur-[100px] md:blur-[150px] rounded-full mix-blend-screen opacity-50 animate-blob2" />
+        <div className="absolute top-[30%] left-[30%] w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] bg-orange-600/20 blur-[80px] md:blur-[120px] rounded-full mix-blend-screen opacity-40 animate-blob1" style={{ animationDelay: '-5s', animationDuration: '20s' }} />
       </div>
 
       {/* Login Screen Overlay */}
