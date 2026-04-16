@@ -168,58 +168,82 @@ export default function App() {
         <div className="absolute top-[30%] left-[30%] w-[40vw] h-[40vw] md:w-[30vw] md:h-[30vw] bg-orange-600/20 blur-[80px] md:blur-[120px] rounded-full mix-blend-screen opacity-40 animate-blob1" style={{ animationDelay: '-5s', animationDuration: '20s' }} />
       </div>
 
-      {/* Login Screen Overlay */}
+      {/* Login Screen Overlay - Fullscreen Elegant Redesign */}
       {(!clientData || authLoading) && (
-        <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center pointer-events-auto">
+        <div className="fixed inset-0 z-[9999] bg-[#050505] flex flex-col items-center justify-center pointer-events-auto overflow-hidden">
+          
+          {/* Animated Background for Login */}
+          <div className="absolute inset-0 z-0">
+            <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-primary/20 blur-[150px] rounded-full mix-blend-screen animate-blob1 opacity-60" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-yellow-600/20 blur-[120px] rounded-full mix-blend-screen animate-blob2 opacity-60" />
+            <div className="absolute top-[40%] left-[20%] w-[50vw] h-[50vw] bg-orange-600/10 blur-[100px] rounded-full mix-blend-screen animate-blob1 opacity-40" style={{ animationDelay: '-3s', animationDuration: '25s' }} />
+            
+            {/* Subtle grid pattern overlay */}
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAyKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50"></div>
+          </div>
+
           {!authLoading ? (
-            <div className="bg-[#111]/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl flex flex-col items-center animate-fade-in-up text-center p-8 m-4 relative">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-yellow-500 p-[2px] shadow-[0_0_20px_rgba(242,125,38,0.5)] mb-4 animate-ultra-reveal">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png" alt="Logo" className="w-full h-full object-cover rounded-full bg-black border-[3px] border-[#111]" />
-              </div>
-              <h1 className="text-2xl md:text-3xl font-display font-black tracking-widest flex items-center gap-2 mb-2">
-                <span className="text-white">Ultra</span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-500">Graphic</span>
-              </h1>
-              <p className="text-sm text-white/50 mb-8">Inicia sesión con Google para acceder al catálogo exclusivo.</p>
-
-              <button
-                onClick={handleGoogleLogin}
-                disabled={!termsAccepted}
-                className={`w-full font-bold py-4 px-6 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center gap-3 relative group overflow-hidden ${termsAccepted ? 'bg-white text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] active:scale-95' : 'bg-white/20 text-white/50 cursor-not-allowed'}`}
-              >
-                <div className={`absolute inset-0 bg-black/5 translate-x-[-100%] ${termsAccepted ? 'group-hover:translate-x-[100%]' : ''} transition-transform duration-1000 ease-out`} />
-                <svg className={`w-6 h-6 relative z-10 ${termsAccepted ? '' : 'opacity-50'}`} viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
-                <span className="relative z-10 text-[15px] tracking-wide">Continuar con Google</span>
-              </button>
-
-              <label className="flex items-center justify-center gap-3 mt-6 text-sm text-white/70 cursor-pointer w-full text-left">
-                <input
-                  type="checkbox"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="w-4 h-4 accent-primary"
-                />
-                <span>Acepto los <a href="#" className="text-primary hover:underline">términos y condiciones</a></span>
-              </label>
-
-              {deferredPrompt && (
-                <div className="mt-8 pt-6 border-t border-white/10 w-full animate-fade-in-up">
-                  <p className="text-xs text-white/50 mb-3">Obtén la mejor experiencia instalando la app.</p>
-                  <button
-                    onClick={async () => {
-                      deferredPrompt.prompt();
-                      const { outcome } = await deferredPrompt.userChoice;
-                      if (outcome === 'accepted') setDeferredPrompt(null);
-                    }}
-                    className="w-full bg-primary/20 text-primary border border-primary/30 font-bold py-3 px-6 rounded-full hover:bg-primary/30 active:scale-95 transition-all text-sm flex items-center justify-center gap-2"
-                  >
-                    <IconHome size={18} /> Instalar la Aplicación
-                  </button>
+            <div className="w-full max-w-lg z-10 px-8 flex flex-col items-center animate-fade-in-up">
+              
+              {/* Elegant Logo Container */}
+              <div className="relative w-32 h-32 md:w-40 md:h-40 mb-8 animate-ultra-reveal">
+                {/* Outer glowing rings */}
+                <div className="absolute inset-0 rounded-full border border-primary/30 animate-[spin_10s_linear_infinite]" />
+                <div className="absolute inset-[-10px] rounded-full border border-yellow-500/20 animate-[spin_15s_linear_infinite_reverse]" />
+                
+                {/* Main logo */}
+                <div className="absolute inset-2 rounded-full bg-gradient-to-tr from-[#F27D26] to-[#FFB800] p-[3px] shadow-[0_0_40px_rgba(242,125,38,0.6)]">
+                  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png" alt="Ultra Graphic Logo" className="w-full h-full object-cover rounded-full bg-[#050505] border-[4px] border-[#050505]" />
                 </div>
-              )}
+              </div>
+
+              {/* Typography */}
+              <div className="text-center mb-12 w-full">
+                <h1 className="text-4xl md:text-6xl font-display font-black tracking-widest mb-4 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 drop-shadow-2xl">
+                  <span className="text-white">ULTRA</span>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F27D26] to-[#FFB800]">GRAPHIC</span>
+                </h1>
+                <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-6"></div>
+                <p className="text-lg md:text-xl text-white/70 font-light tracking-wide">
+                  Excelencia visual para tu negocio.
+                </p>
+              </div>
+
+              {/* Login Controls Container */}
+              <div className="w-full bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+                
+                <h3 className="text-center text-white/90 font-medium mb-8 text-lg">Acceso Exclusivo</h3>
+
+                <button
+                  onClick={handleGoogleLogin}
+                  disabled={!termsAccepted}
+                  className={`w-full h-16 rounded-2xl shadow-lg transition-all duration-300 flex items-center justify-center gap-4 relative group overflow-hidden ${termsAccepted ? 'bg-white text-black hover:scale-[1.02] hover:shadow-[0_10px_40px_rgba(255,255,255,0.3)] active:scale-95' : 'bg-white/10 text-white/40 border border-white/10 cursor-not-allowed'}`}
+                >
+                  <div className={`absolute inset-0 bg-black/5 translate-x-[-100%] ${termsAccepted ? 'group-hover:translate-x-[100%]' : ''} transition-transform duration-1000 ease-out`} />
+                  <svg className={`w-6 h-6 relative z-10 ${termsAccepted ? '' : 'opacity-40 grayscale'}`} viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
+                  <span className="relative z-10 font-bold text-lg tracking-wide">Continuar con Google</span>
+                </button>
+
+                <label className="flex items-center justify-center gap-3 mt-8 cursor-pointer group">
+                  <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${termsAccepted ? 'bg-primary border-primary' : 'bg-transparent border-white/30 group-hover:border-white/60'}`}>
+                    <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="opacity-0 absolute w-0 h-0" />
+                    {termsAccepted && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>}
+                  </div>
+                  <span className="text-sm text-white/60 select-none">Acepto los <a href="#" className="text-white hover:text-primary transition-colors underline decoration-white/30 underline-offset-4">términos y condiciones</a></span>
+                </label>
+              </div>
+
             </div>
           ) : (
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_#f27d26]"></div>
+            <div className="z-10 flex flex-col items-center gap-6">
+              <div className="relative w-20 h-20">
+                <div className="absolute inset-0 border-4 border-white/10 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_20px_#f27d26]"></div>
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png" className="absolute inset-2 rounded-full object-cover opacity-50" />
+              </div>
+              <p className="text-primary font-medium tracking-widest uppercase text-sm animate-pulse">Conectando...</p>
+            </div>
           )}
         </div>
       )}
