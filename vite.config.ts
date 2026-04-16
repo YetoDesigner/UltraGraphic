@@ -8,7 +8,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      injectRegister: 'auto',
+      includeAssets: ['pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
         name: 'Ultra Graphic',
         short_name: 'UG',
@@ -16,6 +17,7 @@ export default defineConfig({
         theme_color: '#050505',
         background_color: '#050505',
         display: 'standalone',
+        start_url: "/",
         icons: [
           {
             src: 'pwa-192x192.png',

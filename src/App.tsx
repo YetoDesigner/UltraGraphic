@@ -715,6 +715,8 @@ export default function App() {
                   setDeferredPrompt(null);
                   setShowInstallModal(false);
                 }
+              } else {
+                alert('La instalación no está disponible en este momento. Intenta recargar la página o instalarla desde las opciones de tu navegador (Añadir a pantalla de inicio).');
               }
             }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
               Instalar Ahora
