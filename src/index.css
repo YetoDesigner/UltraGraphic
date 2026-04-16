@@ -156,14 +156,22 @@ body {
     border-radius: 10px;
 }
 
-@keyframes scan {
-  0% { top: -20%; opacity: 0; }
+@keyframes scanReveal {
+  0% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(100% 0 0 0); }
+}
+.animate-scan-reveal {
+  animation: scanReveal 3s linear forwards;
+}
+
+@keyframes scanLine {
+  0% { top: -10%; opacity: 0; }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% { top: 120%; opacity: 0; }
+  100% { top: 100%; opacity: 0; }
 }
-.animate-scan {
-  animation: scan 2s linear infinite;
+.animate-scan-line {
+  animation: scanLine 3s linear forwards;
 }
 
 @keyframes like-star {

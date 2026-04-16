@@ -806,72 +806,93 @@ export default function App() {
         </div>
       )}
 
-      {/* Remove BG Modal - Fullscreen Elegant */}
+      {/* Remove BG Modal - Focused Single Window */}
       {activeModal === 'removeBg' && (
-        <div className="fixed inset-0 z-[300] bg-[#111] flex flex-col md:flex-row overflow-hidden animate-fade-in-up pointer-events-auto">
-          {/* Controls Side */}
-          <div className="w-full md:w-1/3 bg-[#0a0a0a] p-8 flex flex-col h-full overflow-y-auto border-r border-white/10 relative">
-            <button onClick={() => {setActiveModal(null); setBgImageSrc(null); setBgResultSrc(null);}} className="absolute top-6 right-6 text-white/40 hover:text-white p-2 bg-white/5 rounded-full"><IconX size={20} /></button>
-            
-            <div className="mb-10">
-              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(242,125,38,0.2)]">
-                <IconWand size={28} className="text-primary" />
+        <div className="fixed inset-0 z-[300] bg-[#0a0a0a]/95 backdrop-blur-3xl flex flex-col p-4 md:p-8 animate-fade-in-up pointer-events-auto">
+          {/* Header */}
+          <div className="w-full max-w-6xl mx-auto flex justify-between items-center mb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(242,125,38,0.2)]">
+                <IconWand size={24} className="text-primary" />
               </div>
-              <h3 className="font-display font-bold text-3xl text-white mb-3">Magic Eraser</h3>
-              <p className="text-sm text-white/50 leading-relaxed">
-                Elimina el fondo de cualquier imagen al instante usando Inteligencia Artificial.
-              </p>
+              <div>
+                <h3 className="font-display font-bold text-2xl text-white">Magic Eraser</h3>
+                <p className="text-sm text-white/50">IA Background Remover</p>
+              </div>
             </div>
-
-            <div className="flex-1 flex flex-col justify-center">
-              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-white/20 hover:border-primary/50 rounded-2xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors group relative overflow-hidden">
-                <input type="file" accept="image/*" onChange={handleBgImageUpload} className="hidden" />
-                <div className="flex flex-col items-center gap-3">
-                  <IconDownload size={32} className="text-white/30 group-hover:text-primary transition-colors" />
-                  <span className="text-white/70 font-medium group-hover:text-white">Seleccionar Imagen</span>
-                  <span className="text-xs text-white/40">PNG, JPG o WEBP</span>
-                </div>
-              </label>
-
-              {bgImageSrc && !bgResultSrc && (
-                <button onClick={simulateRemoveBg} disabled={isScanning} className={`mt-6 w-full ${isScanning ? 'bg-primary/50 cursor-wait' : 'bg-white hover:bg-white/90'} text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] flex justify-center items-center gap-2`}>
-                  {isScanning ? (
-                    <><div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div> Procesando...</>
-                  ) : (
-                    <><IconWand size={20} /> Eliminar Fondo</>
-                  )}
-                </button>
-              )}
-
-              {bgResultSrc && (
-                <button onClick={() => triggerDownload(bgResultSrc, 'UltraGraphic-NoBg.png')} className="mt-6 w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)] hover:shadow-[0_0_30px_rgba(242,125,38,0.6)] hover:scale-[1.02] transition-all flex justify-center items-center gap-2">
-                  <IconDownload size={20} /> Descargar Resultado
-                </button>
-              )}
-            </div>
+            <button onClick={() => {setActiveModal(null); setBgImageSrc(null); setBgResultSrc(null);}} className="text-white/40 hover:text-white p-3 bg-white/5 hover:bg-white/10 rounded-full transition-colors"><IconX size={24} /></button>
           </div>
 
-          {/* Preview Side */}
-          <div className="flex-1 flex items-center justify-center p-8 relative overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGgyMHYyMEgwVjB6bTEwIDEwaDEwdjEwSDEwVjEweiIgZmlsbD0iIzIyMiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+')]">
-            {bgImageSrc ? (
-              <div className="relative max-w-full max-h-full rounded-2xl overflow-hidden shadow-2xl animate-fade-in-up">
-                <img src={bgResultSrc || bgImageSrc} className="max-w-full max-h-[80vh] object-contain relative z-10" alt="Preview" />
-                
-                {isScanning && (
-                  <>
-                    <div className="absolute inset-0 bg-black/40 z-20"></div>
-                    {/* Scanner line */}
-                    <div className="absolute left-0 right-0 h-32 bg-gradient-to-b from-transparent to-primary/50 border-b-2 border-primary shadow-[0_10px_30px_rgba(242,125,38,0.8)] z-30 animate-scan"></div>
-                  </>
-                )}
-              </div>
+          {/* Main Canvas */}
+          <div className="flex-1 w-full max-w-6xl mx-auto flex flex-col items-center justify-center relative bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGgyMHYyMEgwVjB6bTEwIDEwaDEwdjEwSDEwVjEweiIgZmlsbD0iIzIyMiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+')] rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+            
+            {!bgImageSrc ? (
+              <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer hover:bg-white/5 transition-colors group">
+                <input type="file" accept="image/*" onChange={handleBgImageUpload} className="hidden" />
+                <div className="w-24 h-24 bg-white/5 group-hover:bg-primary/20 rounded-full flex items-center justify-center mb-6 transition-colors">
+                  <IconDownload size={40} className="text-white/40 group-hover:text-primary transition-colors" />
+                </div>
+                <span className="text-2xl text-white/70 font-medium group-hover:text-white mb-2">Haz clic para subir una imagen</span>
+                <span className="text-sm text-white/40">Soporta PNG, JPG o WEBP</span>
+              </label>
             ) : (
-              <div className="text-center opacity-30 flex flex-col items-center">
-                <IconWand size={80} className="mb-4 opacity-20" />
-                <p className="text-xl font-medium">Sube una imagen para previsualizar</p>
+              <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+                
+                {/* RESULT IMAGE (Bottom Layer - Shows when scanning reveals it or when done) */}
+                <img 
+                  src={bgResultSrc || bgImageSrc} 
+                  className={`absolute max-w-full max-h-full object-contain p-4 transition-all duration-1000 ${bgResultSrc ? 'drop-shadow-[0_0_40px_rgba(242,125,38,0.5)] scale-105' : 'brightness-150 grayscale sepia hue-rotate-180 opacity-60'}`} 
+                  alt="Result" 
+                />
+
+                {/* ORIGINAL IMAGE (Top Layer) */}
+                {(!bgResultSrc || isScanning) && (
+                  <div className={`absolute inset-0 w-full h-full flex items-center justify-center bg-black/50 backdrop-blur-sm ${isScanning ? 'animate-scan-reveal' : ''}`}>
+                    <img src={bgImageSrc} className="max-w-full max-h-full object-contain p-4" alt="Original" />
+                  </div>
+                )}
+
+                {/* SCANNER LINE */}
+                {isScanning && (
+                  <div className="absolute left-0 right-0 h-40 bg-gradient-to-b from-transparent via-primary/20 to-primary/60 border-b-2 border-primary shadow-[0_10px_50px_rgba(242,125,38,1)] z-30 animate-scan-line"></div>
+                )}
               </div>
             )}
           </div>
+
+          {/* Footer Controls */}
+          {bgImageSrc && (
+            <div className="w-full max-w-6xl mx-auto mt-6 flex flex-col md:flex-row justify-center gap-4">
+              <button 
+                onClick={() => {setBgImageSrc(null); setBgResultSrc(null);}} 
+                disabled={isScanning}
+                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-2xl transition-all border border-white/10 shrink-0"
+              >
+                Subir Otra
+              </button>
+
+              {!bgResultSrc ? (
+                <button 
+                  onClick={simulateRemoveBg} 
+                  disabled={isScanning} 
+                  className={`flex-1 max-w-md ${isScanning ? 'bg-primary/50 cursor-wait' : 'bg-gradient-to-r from-primary to-[#E55A00] hover:scale-[1.02]'} text-white font-bold py-4 px-8 rounded-2xl transition-all shadow-[0_0_20px_rgba(242,125,38,0.4)] flex justify-center items-center gap-3 text-lg`}
+                >
+                  {isScanning ? (
+                    <><div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Escaneando IA...</>
+                  ) : (
+                    <><IconWand size={24} /> Quitar Fondo Mágicamente</>
+                  )}
+                </button>
+              ) : (
+                <button 
+                  onClick={() => triggerDownload(bgResultSrc, 'UltraGraphic-NoBg.png')} 
+                  className="flex-1 max-w-md bg-white hover:bg-gray-100 text-black font-black py-4 px-8 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-[1.02] transition-all flex justify-center items-center gap-3 text-lg"
+                >
+                  <IconDownload size={24} /> Descargar Imagen
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
 
