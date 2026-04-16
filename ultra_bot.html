@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra Bot - Chat</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #F27D26;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-black text-white h-screen flex flex-col font-sans overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-[#121212] border-b border-white/10 p-4 flex items-center justify-between shadow-lg z-10">
+        <div class="flex items-center gap-3">
+            <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-[#F27D26] to-orange-600 flex items-center justify-center border-2 border-white/10 shadow-[0_0_15px_rgba(242,125,38,0.3)]">
+                <i class="fas fa-robot text-white text-xl"></i>
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#121212] animate-pulse"></div>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight">Ultra Bot</h1>
+                <p class="text-xs text-white/50 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> En línea ahora
+                </p>
+            </div>
+        </div>
+        <!-- Optional: Clear Chat Button -->
+        <button id="clearChatBtn" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-white/60 hover:text-white">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </header>
+
+    <!-- Chat Messages Area -->
+    <main id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-[url('https://www.transparenttextures.com/patterns/dark-matter.png')] bg-fixed">
+        <!-- Welcome Message -->
+        <div class="flex justify-start animate-fade-in">
+            <div class="max-w-[85%] md:max-w-[70%] bg-white/10 backdrop-blur-md border border-white/5 rounded-2xl rounded-tl-none px-5 py-3 text-sm md:text-base text-white/90 shadow-md">
+                <p>¡Hola! Soy <strong>Ultra Bot</strong> 🤖. ¿En qué puedo ayudarte hoy?</p>
+                <span class="text-[10px] text-white/40 block mt-1 text-right">Justo ahora</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Input Area -->
+    <footer class="bg-[#121212] border-t border-white/10 p-3 md:p-4">
+        <!-- File Preview -->
+        <div id="filePreview" class="hidden mb-3 relative group w-24 h-24 mx-2">
+            <img id="previewImg" src="" class="w-full h-full object-cover rounded-xl border border-white/20 shadow-lg">
+            <button id="cancelFileBtn" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full text-white text-xs flex items-center justify-center shadow-md hover:scale-110 transition-transform cursor-pointer z-20">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="absolute inset-0 bg-black/20 rounded-xl"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto flex items-end gap-2 relative">
+            <!-- Hidden File Input -->
+            <input type="file" id="chatFileInput" class="hidden" accept="image/*">
+            
+            <!-- Attach Button -->
+            <button id="chatAttachBtn" class="w-12 h-12 rounded-full text-white/50 hover:text-[#F27D26] hover:bg-white/5 transition-all flex items-center justify-center shrink-0">
+                <i class="fas fa-paperclip text-lg"></i>
+            </button>
+
+            <!-- Text Input Wrapper -->
+            <div class="flex-1 bg-white/5 rounded-[1.5rem] border border-white/10 focus-within:border-[#F27D26]/50 focus-within:bg-white/10 transition-all flex items-center pr-2 shadow-inner">
+                <textarea id="chatInput" rows="1" placeholder="Escribe un mensaje..." class="w-full bg-transparent text-white text-sm md:text-base p-3.5 pl-4 focus:outline-none resize-none custom-scrollbar max-h-32 placeholder-white/30"></textarea>
+            </div>
+
+            <!-- Action Buttons Container -->
+            <div class="flex items-center gap-2 shrink-0">
+                <!-- Mic Button -->
+                <button id="chatMicBtn" class="w-12 h-12 rounded-full bg-white/10 hover:bg-[#F27D26] text-white transition-all flex items-center justify-center shadow-lg group">
+                    <i class="fas fa-microphone text-lg group-hover:scale-110 transition-transform"></i>
+                </button>
+
+                <!-- Send Button (Always Visible) -->
+                <button id="chatSendBtn" class="w-12 h-12 rounded-full bg-gradient-to-r from-[#F27D26] to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white transition-all flex items-center justify-center shadow-lg shadow-orange-500/20 transform hover:scale-105 active:scale-95">
+                    <i class="fas fa-paper-plane text-lg translate-x-[-1px] translate-y-[1px]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recording Indicator (Floating) -->
+        <div id="chatRecordingIndicator" class="hidden absolute bottom-24 left-1/2 -translate-x-1/2 bg-red-500/90 backdrop-blur-xl border border-red-400/30 text-white px-5 py-2.5 rounded-full flex items-center gap-3 shadow-2xl z-50 animate-pulse">
+            <div class="w-2.5 h-2.5 rounded-full bg-white animate-ping"></div>
+            <span class="font-bold text-sm tracking-wide">Grabando...</span>
+            <div class="h-4 w-[1px] bg-white/30 mx-1"></div>
+            <button id="chatCancelRecord" class="hover:text-white/80 transition-colors text-xs uppercase font-bold tracking-wider">Cancelar</button>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="fixed inset-0 z-50 bg-black/95 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300">
+        <button onclick="document.getElementById('imageModal').classList.add('hidden')" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all hover:scale-110 z-50">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        <img id="modalImage" src="" class="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain transform transition-transform duration-300 scale-95 opacity-0">
+    </div>
+
+    <script>
+        // --- Supabase Configuration ---
+        const supabaseUrl = 'https://rfrddlornidezuggoiya.supabase.co'; // Using project ID to construct URL
+        const supabaseKey = 'sb_publishable_mbLLuC1_Cz1YoUxF1sUxLg_Oe-b6LmQ'; // Using provided key
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- DOM Elements ---
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+        const chatMicBtn = document.getElementById('chatMicBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatAttachBtn = document.getElementById('chatAttachBtn');
+        const chatFileInput = document.getElementById('chatFileInput');
+        const filePreview = document.getElementById('filePreview');
+        const previewImg = document.getElementById('previewImg');
+        const cancelFileBtn = document.getElementById('cancelFileBtn');
+        const chatRecordingIndicator = document.getElementById('chatRecordingIndicator');
+        const chatCancelRecord = document.getElementById('chatCancelRecord');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+
+        // --- User Identification ---
+        // Generate a random ID for this session/device if not exists
+        let chatUserId = localStorage.getItem('ultra_chat_user_id');
+        if (!chatUserId) {
+            chatUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('ultra_chat_user_id', chatUserId);
+        }
+
+        // --- Chat Functions ---
+
+        // 1. Realtime Subscription
+        const channel = supabase.channel('public:messages')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+                const msg = payload.new;
+                // Only show messages relevant to this user
+                if (msg.sender_id === chatUserId || msg.receiver_id === chatUserId) {
+                    addMessageToUI(msg);
+                }
+            })
+            .subscribe();
+
+        // 2. Load History
+        async function loadHistory() {
+            const { data, error } = await supabase
+                .from('messages')
+                .select('*')
+                .or(`sender_id.eq.${chatUserId},receiver_id.eq.${chatUserId}`)
+                .order('created_at', { ascending: true });
+            
+            if (data && data.length > 0) {
+                chatMessages.innerHTML = ''; // Clear welcome message
+                data.forEach(addMessageToUI);
+            }
+        }
+        loadHistory();
+
+        // 3. Add Message to UI
+        function addMessageToUI(msg) {
+            const isMe = msg.sender_id === chatUserId;
+            const div = document.createElement('div');
+            div.className = `flex ${isMe ? 'justify-end' : 'justify-start'} animate-fade-in mb-4`;
+            
+            let contentHtml = '';
+            if (msg.type === 'text') {
+                contentHtml = `<p class="leading-relaxed whitespace-pre-wrap">${msg.content}</p>`;
+            } else if (msg.type === 'image') {
+                contentHtml = `<img src="${msg.content}" class="max-w-full sm:max-w-[250px] rounded-lg cursor-pointer hover:opacity-90 transition-opacity border border-white/10" onclick="openImageModal(this.src)">`;
+            } else if (msg.type === 'audio') {
+                contentHtml = `<div class="flex items-center gap-2 min-w-[200px]"><div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fas fa-play text-xs"></i></div><audio controls src="${msg.content}" class="h-8 w-full opacity-60 hover:opacity-100 transition-opacity"></audio></div>`;
+            }
+
+            const bubbleClass = isMe 
+                ? 'bg-gradient-to-br from-[#F27D26] to-orange-600 text-white rounded-2xl rounded-tr-none shadow-[0_4px_15px_rgba(242,125,38,0.2)]' 
+                : 'bg-white/10 backdrop-blur-md border border-white/5 text-white rounded-2xl rounded-tl-none shadow-sm';
+
+            div.innerHTML = `
+                <div class="max-w-[85%] md:max-w-[70%] ${bubbleClass} px-4 py-3 text-sm md:text-base">
+                    ${contentHtml}
+                    <div class="text-[10px] opacity-50 text-right mt-1.5 font-medium tracking-wide">
+                        ${new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        ${isMe ? '<i class="fas fa-check ml-1 text-[8px]"></i>' : ''}
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatMessages.scrollTo({
+                top: chatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // 4. Send Message Logic
+        async function sendMessage(content, type = 'text') {
+            const { data, error } = await supabase.from('messages').insert({
+                content: content,
+                type: type,
+                sender_id: chatUserId,
+                receiver_id: 'admin', // Always send to admin
+                is_admin: false,
+                read: false
+            });
+
+            if (error) {
+                console.error('Error sending:', error);
+                alert('Error al enviar mensaje: ' + error.message);
+            } else {
+                console.log('Message sent successfully!');
+                // Reset UI
+                chatInput.value = '';
+                filePreview.classList.add('hidden');
+                chatFileInput.value = '';
+                chatInput.style.height = 'auto'; // Reset height
+                toggleButtons();
+                // Optionally scroll to bottom immediately
+                scrollToBottom();
+            }
+        }
+
+        // --- Input Handling ---
+        
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            toggleButtons();
+        });
+
+        function toggleButtons() {
+            const hasText = chatInput.value.trim().length > 0;
+            const hasFile = !filePreview.classList.contains('hidden');
+            
+            // Send Button Logic:
+            // - Always Visible (as requested)
+            // - Enabled/Active if text/file
+            // - Dimmed/Disabled if empty
+            
+            chatSendBtn.classList.remove('hidden');
+            chatSendBtn.classList.add('flex');
+            
+            if (hasText || hasFile) {
+                chatSendBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'grayscale');
+                chatSendBtn.disabled = false;
+                
+                // Hide Mic when ready to send (standard behavior)
+                chatMicBtn.classList.add('hidden');
+                chatMicBtn.classList.remove('flex');
+            } else {
+                chatSendBtn.classList.add('opacity-50', 'cursor-not-allowed', 'grayscale');
+                chatSendBtn.disabled = true;
+                
+                // Show Mic when empty
+                chatMicBtn.classList.remove('hidden');
+                chatMicBtn.classList.add('flex');
+            }
+        }
+        // Initialize buttons state on load
+        toggleButtons();
+
+        // Send on Click
+        chatSendBtn.addEventListener('click', () => {
+            if (!filePreview.classList.contains('hidden') && chatFileInput.files[0]) {
+                uploadAndSendFile(chatFileInput.files[0]);
+            } else {
+                const text = chatInput.value.trim();
+                if (text) sendMessage(text, 'text');
+            }
+        });
+
+        // Send on Enter (PC only, Shift+Enter for newline)
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey && window.innerWidth > 768) {
+                e.preventDefault();
+                chatSendBtn.click();
+            }
+        });
+
+        // --- File Upload ---
+        chatAttachBtn.addEventListener('click', () => chatFileInput.click());
+        
+        chatFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    filePreview.classList.remove('hidden');
+                    toggleButtons();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        cancelFileBtn.addEventListener('click', () => {
+            filePreview.classList.add('hidden');
+            chatFileInput.value = '';
+            toggleButtons();
+        });
+
+        async function uploadAndSendFile(file) {
+            // Show loading state?
+            
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 5)}.${fileExt}`;
+            const filePath = `${chatUserId}/${fileName}`;
+
+            // 1. Upload
+            const { data, error } = await supabase.storage.from('chat-files').upload(filePath, file);
+            
+            if (error) {
+                console.error('Upload error:', error);
+                alert('Error al subir archivo.');
+                return;
+            }
+
+            // 2. Get URL
+            const { data: { publicUrl } } = supabase.storage.from('chat-files').getPublicUrl(filePath);
+            
+            // 3. Send Message
+            const type = file.type.startsWith('image/') ? 'image' : 'audio'; // basic check
+            sendMessage(publicUrl, type);
+        }
+
+        // --- Audio Recording ---
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        chatMicBtn.addEventListener('click', startRecording);
+        chatCancelRecord.addEventListener('click', cancelRecording);
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    if (!isRecording) return; // Cancelled
+                    
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const file = new File([audioBlob], "voice_note.webm", { type: 'audio/webm' });
+                    
+                    await uploadAndSendFile(file);
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                
+                // UI Update
+                chatRecordingIndicator.classList.remove('hidden');
+                chatMicBtn.classList.add('bg-red-500', 'animate-pulse');
+                
+            } catch (err) {
+                console.error('Mic error:', err);
+                alert('No se pudo acceder al micrófono. Verifica los permisos.');
+            }
+        }
+
+        function cancelRecording() {
+            isRecording = false;
+            if (mediaRecorder) mediaRecorder.stop();
+            
+            // UI Reset
+            chatRecordingIndicator.classList.add('hidden');
+            chatMicBtn.classList.remove('bg-red-500', 'animate-pulse');
+        }
+
+        // --- Utilities ---
+        
+        // Image Modal
+        window.openImageModal = (src) => {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('modalImage');
+            img.src = src;
+            modal.classList.remove('hidden');
+            
+            // Animation
+            setTimeout(() => {
+                img.classList.remove('scale-95', 'opacity-0');
+                img.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        };
+
+        // Clear Chat (Local only for demo, or delete from DB?)
+        clearChatBtn.addEventListener('click', () => {
+            if(confirm('¿Borrar historial local?')) {
+                chatMessages.innerHTML = '';
+                // Ideally call a delete function on Supabase if desired
+            }
+        });
+
+    </script>
+</body>
+</html>

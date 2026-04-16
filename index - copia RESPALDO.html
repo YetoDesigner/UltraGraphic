@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra Graphic - Publicidad</title>
+    <link rel="icon"
+        href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png"
+        type="image/png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#F27D26',
+                        surface: '#121212',
+                        card: '#1E1E1E',
+                    }
+                }
+            }
+        }
+        // QR Generator Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const qrNavBtn = document.getElementById('qrNavBtn');
+            const qrModal = document.getElementById('qrModal');
+            const qrModalContent = document.getElementById('qrModalContent');
+            const closeQrBtn = document.getElementById('closeQrBtn');
+            const generateQrBtn = document.getElementById('generateQrBtn');
+            const qrInput = document.getElementById('qrInput');
+            const qrResult = document.getElementById('qrResult');
+            const qrImage = document.getElementById('qrImage');
+            const downloadQrBtn = document.getElementById('downloadQrBtn');
+
+            function toggleQrModal() {
+                const isHidden = qrModal.classList.contains('hidden');
+                if (isHidden) {
+                    qrModal.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        qrModalContent.classList.remove('scale-95', 'opacity-0');
+                        qrModalContent.classList.add('scale-100', 'opacity-100');
+                    });
+                } else {
+                    qrModalContent.classList.remove('scale-100', 'opacity-100');
+                    qrModalContent.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        qrModal.classList.add('hidden');
+                        qrResult.classList.add('hidden');
+                        qrInput.value = '';
+                    }, 300);
+                }
+            }
+
+            if (qrNavBtn) {
+                qrNavBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleQrModal();
+
+                    // Set active state manually since we removed onclick
+                    document.querySelectorAll('.nav-btn').forEach(b => {
+                        b.classList.remove('active');
+                        // Also clear manual color classes used by chat button
+                        b.classList.remove('text-primary');
+                        b.classList.add('text-white/40');
+                        b.querySelector('.nav-dot').style.transform = 'scale(0)';
+                    });
+                    qrNavBtn.classList.add('active');
+                    qrNavBtn.classList.remove('text-white/40'); // Ensure we remove the inactive color
+                    qrNavBtn.querySelector('.nav-dot').style.transform = 'scale(1)';
+                });
+            }
+
+            if (closeQrBtn) closeQrBtn.addEventListener('click', toggleQrModal);
+
+            if (qrModal) {
+                qrModal.addEventListener('click', (e) => {
+                    if (e.target === qrModal) toggleQrModal();
+                });
+            }
+
+            if (generateQrBtn) {
+                generateQrBtn.addEventListener('click', () => {
+                    const text = qrInput.value.trim();
+                    if (!text) return;
+
+                    const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(text)}`;
+                    qrImage.src = apiUrl;
+
+                    qrImage.onload = () => {
+                        qrResult.classList.remove('hidden');
+                    };
+                });
+            }
+
+            if (qrInput) {
+                qrInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        generateQrBtn.click();
+                    }
+                });
+            }
+
+            if (downloadQrBtn) {
+                downloadQrBtn.addEventListener('click', async () => {
+                    try {
+                        const response = await fetch(qrImage.src);
+                        const blob = await response.blob();
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'qr-code-ultra.png';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } catch (error) {
+                        console.error('Error downloading QR:', error);
+                        window.open(qrImage.src, '_blank');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Welcome Animation */
+        @keyframes ultraReveal {
+            0% { opacity: 0; transform: translateY(40px) scale(0.9); letter-spacing: -5px; }
+            100% { opacity: 1; transform: translateY(0) scale(1); letter-spacing: normal; }
+        }
+        
+        .animate-ultra-reveal {
+            animation: ultraReveal 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Header Text Animation */
+        @keyframes headerReveal {
+            0% { transform: translateY(120%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-header-reveal {
+            display: inline-block;
+            animation: headerReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+        }
+
+        .orange-glow {
+            box-shadow: 0 0 20px rgba(242, 125, 38, 0.2);
+        }
+
+        /* Animated Logo Gradient Border */
+        .animated-gradient-border {
+            position: relative;
+            background: linear-gradient(45deg, #FFD700, #FF0000, #FFD700);
+            background-size: 200% 200%;
+            animation: borderGradientMove 2s ease infinite;
+            padding: 2px; /* Border thickness */
+            border-radius: 9999px; /* Full rounded */
+        }
+
+        @keyframes borderGradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animated-gradient-border img {
+            border-radius: 9999px;
+            display: block;
+            background: white; /* Optional: if transparent logo needs bg */
+        }
+
+        .glass-nav {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Hide scrollbar for horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Menu Animation */
+        #menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #menu.open {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Staggered Animation for Menu Items */
+        .menu-item {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.3s ease;
+        }
+
+        #menu.open .menu-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        #menu.open .menu-item:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        #menu.open .menu-item:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        #menu.open .menu-item:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+
+        #menu.open .menu-item:nth-child(4) {
+            transition-delay: 0.4s;
+        }
+
+        /* Smooth Scroll Behavior */
+        .scroll-container {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading Skeleton Animation */
+        @keyframes shine {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .skeleton {
+            position: relative;
+            overflow: hidden;
+            background-color: #2a2a2a;
+        }
+
+        .skeleton::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: translateX(-100%);
+            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.05) 20%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0));
+            animation: shine 2s infinite;
+        }
+
+        /* Nav Dot Animation */
+        .nav-dot {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0);
+        }
+
+        .nav-btn.active .nav-dot {
+            transform: scale(1);
+        }
+
+        .nav-btn.active {
+            color: #F27D26;
+        }
+
+        /* Message Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+
+        /* Premium Bottom Nav Icon Animation */
+        #bottomNavContainer .nav-btn {
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translateY(30px) scale(0.8);
+            opacity: 0;
+        }
+
+        #bottomNavContainer:not(.translate-y-full) .nav-btn {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        #bottomNavContainer:not(.translate-y-full) .nav-btn:nth-child(1) { transition-delay: 0.1s; }
+        #bottomNavContainer:not(.translate-y-full) .nav-btn:nth-child(2) { transition-delay: 0.15s; }
+        #bottomNavContainer:not(.translate-y-full) .nav-btn:nth-child(3) { transition-delay: 0.2s; }
+        #bottomNavContainer:not(.translate-y-full) .nav-btn:nth-child(4) { transition-delay: 0.25s; }
+        #bottomNavContainer:not(.translate-y-full) .nav-btn:nth-child(5) { transition-delay: 0.3s; }
+
+    </style>
+</head>
+
+<body class="min-h-screen pb-24 bg-black text-white relative overflow-x-hidden">
+
+    <!-- Welcome Overlay -->
+    <div id="welcomeOverlay" class="fixed inset-0 z-[9999] bg-black/95 flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="text-center mb-16 px-4">
+            <p class="text-white text-3xl md:text-5xl font-bold mb-2 tracking-wide drop-shadow-lg">Bienvenido a</p>
+            <h1 class="text-7xl md:text-9xl font-display font-black animate-ultra-reveal leading-none mt-4">
+                <span class="text-white drop-shadow-2xl block md:inline">Ultra</span> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#F27D26] via-orange-500 to-yellow-500 filter drop-shadow-[0_0_20px_rgba(242,125,38,0.5)]">Graphic</span>
+            </h1>
+        </div>
+        <button id="playIntroBtn" class="group relative px-12 py-6 bg-white/5 rounded-full border border-white/10 hover:bg-white/10 transition-all hover:scale-110 active:scale-95 shadow-2xl mt-8">
+            <div class="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-75"></div>
+            <div class="flex items-center gap-4 relative z-10">
+                <div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:shadow-primary/50 transition-shadow">
+                    <i class="fas fa-arrow-right text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold tracking-[0.2em] uppercase text-white/90 group-hover:text-white transition-colors">Iniciar</span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div id="menu" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-3xl p-10 flex flex-col">
+        <div class="flex justify-end mb-16">
+            <button id="closeMenuBtn"
+                class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:bg-white/20 transition-all transform hover:scale-110 shadow-2xl backdrop-blur-md">
+                <i class="fas fa-times text-2xl text-white/80"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-6">
+            <button class="menu-item flex items-center gap-6 group text-left w-full">
+                <div
+                    class="p-4 bg-primary/10 rounded-2xl text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight group-hover:text-primary transition-colors">
+                    Clientes
+                </span>
+            </button>
+            <button class="menu-item flex items-center gap-6 group text-left w-full">
+                <div
+                    class="p-4 bg-primary/10 rounded-2xl text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                    <i class="fas fa-desktop text-xl"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight group-hover:text-primary transition-colors">
+                    Programas
+                </span>
+            </button>
+            <button class="menu-item flex items-center gap-6 group text-left w-full">
+                <div
+                    class="p-4 bg-primary/10 rounded-2xl text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                    <i class="fas fa-palette text-xl"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight group-hover:text-primary transition-colors">
+                    Diseños Gráficos
+                </span>
+            </button>
+            <button class="menu-item flex items-center gap-6 group text-left w-full">
+                <div
+                    class="p-4 bg-primary/10 rounded-2xl text-primary group-hover:bg-primary group-hover:text-black transition-all duration-300">
+                    <i class="fas fa-wrench text-xl"></i>
+                </div>
+                <span class="text-2xl font-display font-bold tracking-tight group-hover:text-primary transition-colors">
+                    Herramientas
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="px-6 pt-8 pb-2 sticky top-0 z-50 flex justify-center">
+        <div
+            class="max-w-3xl mx-auto bg-black/20 backdrop-blur-md border border-white/10 pl-2 pr-4 py-2 rounded-full flex items-center justify-between w-full shadow-xl shadow-primary/5 transition-all duration-500 transform translate-y-0 opacity-100">
+            <!-- Circular Logo -->
+            <div class="flex items-center gap-3">
+                <div class="animated-gradient-border w-12 h-12 flex items-center justify-center orange-glow">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png"
+                        alt="Logo" class="w-full h-full object-cover rounded-full">
+                </div>
+            </div>
+
+            <!-- Centered Text -->
+            <h1
+                class="text-lg font-display font-bold tracking-tight whitespace-nowrap absolute left-1/2 -translate-x-1/2 overflow-hidden">
+                <span class="animate-header-reveal">
+                    Ultra <span class="text-primary">Graphic</span>
+                </span>
+            </h1>
+
+            <!-- Menu Button -->
+            <button id="openMenuBtn" class="text-white/70 hover:text-primary transition-colors p-2">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Featured Section -->
+    <section class="py-4">
+        <div class="px-8 mb-3 opacity-100 transition-opacity duration-500 delay-200">
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+                Productos publicitarios
+            </span>
+        </div>
+
+        <div id="scroll1"
+            class="flex overflow-x-auto no-scrollbar gap-6 px-6 pb-4 snap-x snap-mandatory scroll-container">
+            <!-- Item 1 -->
+            <div class="relative min-w-[350px] h-[480px] rounded-[3rem] overflow-hidden border border-white/5 group bg-card shadow-2xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Avisos Publicitarios"
+                data-image1="https://picsum.photos/seed/web/400/300?grayscale"
+                data-image2="https://picsum.photos/seed/web2/400/300"
+                data-image3="https://picsum.photos/seed/web3/400/300"
+                data-audio="#.mp3">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhoqaDmm69PFaes5PDpXDfOkTQr7MeJmxwAAd8rZcv5XYXI_7iWjjeDzgfSWJIdGQRpZuU3T1ArvA-B6GT-98rAsgsBiR4Wk6LP4R_DBga2YkjTkYtafAoP4bw1NwjjxcLrVqmBTGNAxqXvlubNT9AAV1Yk6T92ytlJzoQa2wcMnEEAtxRoC4kYUIfzRZSz/s1986/teyrtyrty.jpg" alt="Diseño de Logotipo"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="space-y-4 transform translate-y-0 transition-transform duration-500">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                            Acrilico
+                        </span>
+                        <h4
+                            class="font-display font-bold text-2xl leading-tight group-hover:text-primary transition-colors">
+                            Avisos Publicitarios
+                        </h4>
+                        <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-star text-primary text-sm"></i>
+                                <span class="text-base font-bold">4.9</span>
+                                <span class="text-xs text-white/40">(124)</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-white/60">
+                                <i class="far fa-clock text-sm"></i>
+                                <span class="text-xs font-medium uppercase tracking-wider">2d entrega</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative min-w-[350px] h-[480px] rounded-[3rem] overflow-hidden border border-white/5 group bg-card shadow-2xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Impresion de vinilo"
+                data-image1="https://i.ytimg.com/vi/Yr12vQJ73Pc/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAT1Hz-nhH6OcfCZzSsHvw2uB6Gyw"
+                data-image2="https://www.ggdigital.com.co/pluginAppObj/pluginAppObj_47_10/senales-preventivas-informativas-reglamentarias-impresion-bogota-domicilios-emergencia-evacuacion-industrial-oficinas-edificios-vinilo-2.jpg"
+                data-image3="https://www.expresatdigital.com/wp-content/uploads/2023/05/002928ad-f26d-44ec-85ef-f8fe0cc9e9ca.jpg"
+                data-image4="https://gammatech.com.co/wp-content/uploads/2024/08/impresion-en-vinilo-adhesivo-1.jpg" data-audio="vinilo.mp3" data-calculator="true"
+                data-price-m2="35000" data-install-price="17000">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhR6yfDvUAKZeCgwTM02QlMtJG7t7IsrKYMjDDv3v4tQTNjnz2szI-Z7SG5WIIxHCJRwAOGzxbvCwahVKuo3q1nn678CXrfn1i-PMb76a4WC1pdTqQHeZZVZOjYSkO4AbpB9cr9gN921Pk1S8PBCsVJq-5h5w85UqzRDxJWhg976wZXNcC6KCr-EIwHauBq/s1986/fghfghfh.jpg" alt="Landing Page"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="space-y-4">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                            Impresión
+                        </span>
+                        <h4
+                            class="font-display font-bold text-2xl leading-tight group-hover:text-primary transition-colors">
+                            Impresion de vinilo
+                        </h4>
+                        <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-star text-primary text-sm"></i>
+                                <span class="text-base font-bold">5.0</span>
+                                <span class="text-xs text-white/40">(89)</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-white/60">
+                                <i class="far fa-clock text-sm"></i>
+                                <span class="text-xs font-medium uppercase tracking-wider">2d entrega</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="relative min-w-[350px] h-[480px] rounded-[3rem] overflow-hidden border border-white/5 group bg-card shadow-2xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="letrero circular en acrilico plano"
+                data-image1="https://picsum.photos/seed/video/400/300"
+                data-image2="https://picsum.photos/seed/video2/400/300"
+                data-image3="https://picsum.photos/seed/video3/400/300"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">
+                <img src="https://i.pinimg.com/736x/2d/c9/76/2dc9761eb12e586dfc6ddfa5ecb1543b.jpg" alt="Edición Video"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="space-y-4">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                            Acrilico
+                        </span>
+                        <h4
+                            class="font-display font-bold text-2xl leading-tight group-hover:text-primary transition-colors">
+                            Letro circular en acrilico con luz.
+                        </h4>
+                        <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-star text-primary text-sm"></i>
+                                <span class="text-base font-bold">4.8</span>
+                                <span class="text-xs text-white/40">(215)</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-white/60">
+                                <i class="far fa-clock text-sm"></i>
+                                <span class="text-xs font-medium uppercase tracking-wider">2d entrega</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="relative min-w-[350px] h-[480px] rounded-[3rem] overflow-hidden border border-white/5 group bg-card shadow-2xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Aviso colombina acrilico"
+                data-image1="https://picsum.photos/seed/write/400/300"
+                data-image2="https://picsum.photos/seed/write2/400/300"
+                data-image3="https://picsum.photos/seed/write3/400/300"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">
+                <img src="https://i.pinimg.com/736x/a9/90/3d/a9903dca7304fb04f627897121b8d7cb.jpg" alt="Redacción"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90 group-hover:opacity-100 transition-opacity">
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-8">
+                    <div class="space-y-4">
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                            Aviso 
+                        </span>
+                        <h4
+                            class="font-display font-bold text-2xl leading-tight group-hover:text-primary transition-colors">
+                            Aviso colombina en acrilico
+                        </h4>
+                        <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-star text-primary text-sm"></i>
+                                <span class="text-base font-bold">4.7</span>
+                                <span class="text-xs text-white/40">(56)</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-white/60">
+                                <i class="far fa-clock text-sm"></i>
+                                <span class="text-xs font-medium uppercase tracking-wider">2d entrega</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Second Section -->
+    <section class="py-2">
+        <div class="px-8 mb-3">
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+                Nuevos lanzamientos
+            </span>
+        </div>
+
+        <div id="scroll2"
+            class="flex overflow-x-auto no-scrollbar gap-4 px-6 pb-4 snap-x snap-mandatory scroll-container">
+            <!-- Items repeated for demo -->
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Tarjeta de Presentación"
+                data-image1="https://i.pinimg.com/1200x/81/7a/9f/817a9f884a60ec39fcb8aa235cb7b938.jpg"
+                data-image2="https://i.pinimg.com/1200x/ee/8c/d5/ee8cd56134a797a4a0a1cb6532ec2a73.jpg"
+                data-image3="https://i.pinimg.com/1200x/7e/ee/f9/7eeef918592de9af68ad8507e4fff3ab.jpg"
+                data-audio="Tarjetas%20de%20presentacion.mp3">
+                <img src="https://i.pinimg.com/736x/6a/bd/3d/6abd3d064b884a558e60a6e66a7770f2.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Tarjeta de Presentación</h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Reconocimeintos en Acrilico"
+                data-image1="https://i.pinimg.com/736x/87/83/a4/8783a4917489479185c5849b1e1e97c1.jpg"
+                data-image2="https://i.pinimg.com/1200x/49/fd/a1/49fda1fed56bfcffd290b7c5673e0752.jpg"
+                data-image3="https://i.pinimg.com/736x/1b/3a/ff/1b3affcc5a9f34c8b6978f1c03f45e46.jpg" data-audio="hablador%20QR.mp3">
+                <img src="https://i.pinimg.com/1200x/52/78/3f/52783f9fb87be6629ba7ef7542aa464f.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Reconocimientos en acrilico/h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Talonario de facturas"
+                data-image1="https://picsum.photos/seed/video/400/300?grayscale"
+                data-image2="https://picsum.photos/seed/video2/400/300"
+                data-image3="https://picsum.photos/seed/video3/400/300" data-audio="talonarios.mp3">
+                <img src="https://i.pinimg.com/1200x/6b/11/6d/6b116d67e52586914b2f59ea1ab34a01.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Talonarios de facturas</h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Cartas Menús para restaurantes"
+                data-image1="https://i.pinimg.com/736x/8c/3b/ee/8c3bee0f364463ed764a5c778e1e06a3.jpg"
+                data-image2="https://i.pinimg.com/1200x/0e/7f/69/0e7f69c8d1c7931ee4f73c9c7f515d62.jpg"
+                data-image3="https://i.pinimg.com/736x/ba/11/f3/ba11f35ac35dc25ebd1ac2773c8f43a2.jpg"
+                data-audio="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3">
+                <img src="https://i.pinimg.com/474x/63/f2/cd/63f2cde7da7929c88d2dedf9282942f3.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Cartas Menús para restaurantes
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Third Section -->
+    <section class="py-2">
+        <div class="px-8 mb-3">
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">
+                Herramientas Pro
+            </span>
+        </div>
+
+        <div id="scroll3"
+            class="flex overflow-x-auto no-scrollbar gap-4 px-6 pb-4 snap-x snap-mandatory scroll-container">
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Etiquetas para ropa"
+                data-image1="https://i.pinimg.com/736x/49/0b/c4/490bc47963e1073418ecdc9614923f1e.jpg"
+                data-image2="https://i.pinimg.com/736x/29/6e/f0/296ef0e61c34ebd4dc3c31d0b152a8eb.jpg"
+                data-image3="https://i.pinimg.com/736x/84/b4/c3/84b4c3ccc93945cb3805f31763593e99.jpg"
+                data-audio="etiquitas.mp3">
+                <img src="https://i.pinimg.com/1200x/61/96/ab/6196ab16187b3321ec9edc785ceceb21.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Etiquetas para ropa</h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Volantes Publicitarios"
+                data-image1="https://picsum.photos/seed/web/400/300?blur=2"
+                data-image2="https://picsum.photos/seed/web2/400/300"
+                data-image3="https://picsum.photos/seed/web3/400/300" data-audio="volantes.mp3">
+                <img src="https://i.pinimg.com/1200x/61/a0/84/61a0845f00bc43c326ee815584b28b6f.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Volantes Publicitarios</h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Roll Up"
+                data-image1="https://i.pinimg.com/1200x/e3/4e/c2/e34ec2bc0d8c20175c01f7530e9d810b.jpg"
+                data-image2="https://i.pinimg.com/736x/51/ca/0a/51ca0a133fca27d564ba7c892c86a559.jpg"
+                data-image3="https://retio.pl/userdata/public/gfx/6757/Zestaw-po-wyjeciu-z-torby---Rollup-Mosquito-120-x-200-cm-stojak-reklamowy-jak-Scianka-Reklamowa-rozwijany-z-opcja-wydruku.jpg"
+                data-audio="rollup.mp3">
+                <img src="https://i.pinimg.com/1200x/38/0b/6a/380b6ab5ec0b96a19e1ae6795a76b36f.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Roll Up Publicitarios</h4>
+                </div>
+            </div>
+            <div class="relative min-w-[340px] h-[230px] rounded-[2rem] overflow-hidden border border-white/5 group bg-card shadow-xl snap-center shrink-0 cursor-pointer"
+                onclick="openProductModal(this)" data-title="Habladores QR Acrilicos"
+                data-image1="https://i.pinimg.com/1200x/fc/5e/81/fc5e81d05d7b769c259cced2ec8fcbc5.jpg"
+                data-image2="https://i.pinimg.com/1200x/ee/ff/ea/eeffea9bc4f75bce1f963c362e239789.jpg"
+                data-image3="https://i.pinimg.com/736x/a2/a2/20/a2a220d5a5f4d8efb6eb7b628ec85e5e.jpg" data-audio="hablador%20QR.mp3">
+                <img src="https://i.pinimg.com/1200x/90/7f/c0/907fc050e27111827a2b7c73fda30d77.jpg"
+                    class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent opacity-80"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-5">
+                    <h4 class="font-display font-bold text-sm leading-tight line-clamp-2">Habladores QR Acrilicos</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Nav -->
+    <div id="bottomNavContainer" class="fixed bottom-0 left-0 right-0 p-4 z-40 bg-gradient-to-t from-black via-black to-transparent transition-all duration-500 translate-y-full opacity-0">
+        <nav
+            class="bg-surface/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-4 flex justify-between items-center shadow-2xl max-w-md mx-auto">
+            <button class="nav-btn active flex flex-col items-center transition-colors text-white/40"
+                onclick="setActiveTab(this)">
+                <div class="relative">
+                    <i class="fas fa-home text-xl"></i>
+                    <div class="nav-dot absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full orange-glow"></div>
+                </div>
+            </button>
+            <button id="removeBgNavBtn" class="nav-btn flex flex-col items-center transition-colors text-white/40">
+                <div class="relative">
+                    <i class="fas fa-layer-group text-xl"></i>
+                    <div class="nav-dot absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full orange-glow scale-0">
+                    </div>
+                </div>
+            </button>
+            <button id="navChatBtn" class="nav-btn flex flex-col items-center transition-colors text-white/40" onclick="window.open('https://wa.me/573027502695', '_blank')">
+                <div class="relative">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    <div class="nav-dot absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full orange-glow scale-0">
+                    </div>
+                </div>
+            </button>
+            <button id="qrNavBtn" class="nav-btn flex flex-col items-center transition-colors text-white/40">
+                <div class="relative">
+                    <i class="fas fa-qrcode text-xl"></i>
+                    <div class="nav-dot absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full orange-glow scale-0">
+                    </div>
+                </div>
+            </button>
+            <button id="userNavBtn" class="nav-btn flex flex-col items-center transition-colors text-white/40">
+                <div class="relative">
+                    <i class="far fa-user text-xl"></i>
+                    <div class="nav-dot absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full orange-glow scale-0">
+                    </div>
+                </div>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal"
+        class="fixed inset-0 z-[250] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div id="registerModalContent"
+            class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300">
+            
+            <!-- Header -->
+            <div class="p-6 border-b border-white/5 bg-gradient-to-r from-primary/10 to-transparent relative">
+                <h3 class="font-bold text-white text-xl mb-1">Regístrate como Cliente</h3>
+                <p class="text-xs text-white/50">Únete a la familia Ultra Graphic</p>
+                <!-- Botón de cerrar oculto por defecto si queremos obligar. Lo mantenemos en el HTML y ocultarlo por CSS/Estilo si no tiene datos -->
+                <button id="closeRegisterBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors hidden group">
+                    <i class="fas fa-times text-white/40"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 space-y-5">
+                <!-- Name Field -->
+                <div class="space-y-2">
+                    <label class="text-xs text-primary font-bold uppercase tracking-wider ml-1">Nombre Completo</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-user text-white/30 group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input type="text" id="regName" placeholder="Tu nombre"
+                            class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-inner">
+                    </div>
+                </div>
+
+                <!-- Brand Name Field -->
+                <div class="space-y-2">
+                    <label class="text-xs text-primary font-bold uppercase tracking-wider ml-1">Nombre de tu Marca</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-briefcase text-white/30 group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input type="text" id="regBrand" placeholder="Ej. Ultra Store"
+                            class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-inner">
+                    </div>
+                </div>
+
+                <!-- Phone Field -->
+                <div class="space-y-2">
+                    <label class="text-xs text-primary font-bold uppercase tracking-wider ml-1">Número Celular</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-phone text-white/30 group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input type="tel" id="regPhone" placeholder="300 123 4567"
+                            oninput="this.value = this.value.replace(/[^0-9+\s]/g, '')"
+                            class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-inner">
+                    </div>
+                </div>
+
+                <button id="submitRegisterBtn"
+                    class="w-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary-dark hover:to-orange-700 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transform active:scale-95 mt-4">
+                    <span>Guardar Registro</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Profile Modal (Shown when logged in) -->
+    <div id="profileModal"
+        class="fixed inset-0 z-[250] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div id="profileModalContent"
+            class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300">
+            
+            <div class="p-8 flex flex-col items-center text-center">
+                <button id="closeProfileBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                    <i class="fas fa-times text-white/40"></i>
+                </button>
+
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-orange-600 flex items-center justify-center mb-4 shadow-xl shadow-primary/20">
+                    <span id="profileInitials" class="text-2xl font-bold text-white">UG</span>
+                </div>
+
+                <h3 id="profileName" class="text-xl font-bold text-white mb-1">Nombre Cliente</h3>
+                <p id="profileBrand" class="text-primary font-medium mb-6">Marca Cliente</p>
+
+                <div class="w-full bg-white/5 rounded-2xl p-4 mb-6 border border-white/5">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-white/40">Teléfono</span>
+                        <span id="profilePhone" class="text-sm text-white font-mono">300...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-white/40">Estado</span>
+                        <span class="text-xs bg-green-500/20 text-green-500 px-2 py-0.5 rounded-full border border-green-500/20">Activo</span>
+                    </div>
+                </div>
+
+                <button id="logoutBtn" class="text-white/40 hover:text-red-400 text-sm transition-colors flex items-center gap-2">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Generator Modal -->
+    <div id="qrModal"
+        class="fixed inset-0 z-[250] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div id="qrModalContent"
+            class="bg-[#1a1a1a] border border-white/10 rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300">
+            <!-- Header -->
+            <div
+                class="p-5 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-primary/10 to-transparent">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                        <i class="fas fa-qrcode text-primary"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Generador QR</h3>
+                        <p class="text-xs text-white/50">Convierte enlaces a códigos QR</p>
+                    </div>
+                </div>
+                <button id="closeQrBtn"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors group">
+                    <i class="fas fa-times text-white/40 group-hover:text-white transition-colors"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 space-y-6">
+                <div class="space-y-2">
+                    <label class="text-xs text-primary font-bold uppercase tracking-wider ml-1">Ingresa tu
+                        enlace</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-link text-white/30 group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input type="text" id="qrInput" placeholder="https://ejemplo.com"
+                            class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-11 pr-4 text-white placeholder-white/20 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all shadow-inner">
+                    </div>
+                </div>
+
+                <button id="generateQrBtn"
+                    class="w-full bg-white/10 hover:bg-white/15 text-white font-bold py-3.5 rounded-xl transition-all border border-white/5 hover:border-white/10 flex items-center justify-center gap-2 group">
+                    <span class="group-hover:scale-105 transition-transform">Generar Código QR</span>
+                    <i class="fas fa-magic text-primary group-hover:rotate-12 transition-transform"></i>
+                </button>
+
+                <!-- Result Area -->
+                <div id="qrResult" class="hidden flex flex-col items-center space-y-5 pt-2 animate-fade-in-up">
+                    <div
+                        class="relative group p-4 bg-white rounded-2xl shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)] transition-transform hover:scale-105 duration-300">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-tr from-primary to-purple-500 rounded-2xl opacity-30 blur group-hover:opacity-60 transition duration-500">
+                        </div>
+                        <div class="relative bg-white p-2 rounded-xl">
+                            <img id="qrImage" src="" class="w-48 h-48 object-contain" alt="QR Code">
+                        </div>
+                    </div>
+
+                    <button id="downloadQrBtn"
+                        class="w-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary-dark hover:to-orange-700 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transform active:scale-95">
+                        <i class="fas fa-download"></i> Descargar Imagen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Remove Background Modal -->
+    <div id="removeBgModal"
+        class="fixed inset-0 z-[250] bg-black/80 backdrop-blur-sm hidden flex items-end md:items-center justify-center p-0 md:p-4 opacity-0 transition-opacity duration-300">
+        <div id="removeBgModalContent"
+            class="bg-[#1a1a1a] border-t md:border border-white/10 rounded-t-[2rem] md:rounded-3xl w-full max-w-md overflow-hidden shadow-2xl transform transition-all translate-y-full md:translate-y-0 md:scale-95 duration-500 flex flex-col max-h-[90vh]">
+
+            <!-- Drag Handle (Mobile only) -->
+            <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mt-3 mb-1 md:hidden"></div>
+
+            <!-- Header -->
+            <div
+                class="p-5 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-primary/10 to-transparent">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                        <i class="fas fa-magic text-primary"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Removedor de Fondo Ultra</h3>
+                        <p class="text-xs text-white/50">IA Background Remover</p>
+                    </div>
+                </div>
+                <button id="closeRemoveBgBtn"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors group">
+                    <i class="fas fa-times text-white/40 group-hover:text-white transition-colors"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 space-y-6 overflow-y-auto custom-scrollbar">
+                <!-- Main Interaction Area -->
+                <div id="uploadArea"
+                    class="relative border-2 border-dashed border-white/10 rounded-2xl h-[300px] flex items-center justify-center overflow-hidden group hover:border-primary/50 transition-all bg-black/20">
+
+                    <!-- File Input -->
+                    <input type="file" id="removeBgInput" accept="image/*"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-50">
+
+                    <!-- Placeholder Content -->
+                    <div id="uploadPlaceholder" class="text-center p-6 transition-opacity duration-300">
+                        <div
+                            class="w-20 h-20 rounded-full bg-white/5 mx-auto flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 border border-white/5">
+                            <i
+                                class="fas fa-cloud-upload-alt text-3xl text-white/40 group-hover:text-primary transition-colors"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-1">Sube tu imagen</h4>
+                        <p class="text-sm text-white/40">Toca para seleccionar</p>
+                    </div>
+
+                    <!-- Image Preview & Scanning Effect -->
+                    <div id="previewContainer" class="absolute inset-0 hidden z-10 bg-[#1a1a1a]">
+                        <img id="originalImagePreview" src="" class="w-full h-full object-contain opacity-50"
+                            alt="Original">
+
+                        <!-- Scanning Line -->
+                        <div id="scanningLine" class="absolute top-0 left-0 w-full h-full hidden">
+                            <div
+                                class="absolute top-0 left-0 w-full h-1 bg-primary shadow-[0_0_20px_rgba(242,125,38,1)] animate-scan z-20">
+                            </div>
+                            <div class="absolute inset-0 bg-primary/10 animate-pulse z-10"></div>
+                            <div class="absolute inset-0 flex items-center justify-center z-30">
+                                <div
+                                    class="bg-black/60 backdrop-blur px-4 py-2 rounded-full border border-primary/30 text-primary text-xs font-bold animate-pulse shadow-lg">
+                                    <i class="fas fa-cog fa-spin mr-2"></i> PROCESANDO IA...
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result Image (Overlay) -->
+                        <div id="resultImageContainer"
+                            class="absolute inset-0 hidden bg-[url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAHUlEQVQ4jWNgYGAQAOPj4/8BM0I0Mw4Yg1E7gBAAABqOAxH/2C4gAAAAAElFTkSuQmCC')]">
+                            <img id="processedImage" src="" class="w-full h-full object-contain relative z-10"
+                                alt="Processed">
+                            <div
+                                class="absolute bottom-4 right-4 bg-primary text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg z-20">
+                                SIN FONDO
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Hidden initially) -->
+                <div id="removeBgActions" class="hidden space-y-3 animate-fade-in-up">
+                    <a id="downloadRemoveBgLink" download="ultra-remove-result.png" class="block">
+                        <button
+                            class="w-full bg-gradient-to-r from-primary to-orange-600 hover:from-primary-dark hover:to-orange-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95">
+                            <i class="fas fa-download"></i> Descargar Imagen
+                        </button>
+                    </a>
+                    <button id="resetRemoveBgBtn"
+                        class="w-full py-3 text-sm text-white/40 hover:text-white border border-white/5 rounded-xl hover:bg-white/5 transition-all">
+                        Procesar nueva imagen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Welcome & Initial Registration Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeOverlay = document.getElementById('welcomeOverlay');
+            const playIntroBtn = document.getElementById('playIntroBtn');
+            
+            // Check if user is registered
+            const hasData = localStorage.getItem('ultra_client_data');
+            
+            if (hasData) {
+                // Already registered: Hide welcome immediately, no modals pop up
+                if (welcomeOverlay) {
+                    welcomeOverlay.classList.add('hidden');
+                    welcomeOverlay.style.display = 'none';
+                }
+
+                // Confetti on start if already registered
+                setTimeout(() => {
+                    const duration = 2000;
+                    const end = Date.now() + duration;
+                    (function frame() {
+                        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#F27D26', '#ffffff'] });
+                        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#F27D26', '#ffffff'] });
+                        if (Date.now() < end) requestAnimationFrame(frame);
+                    }());
+                }, 500);
+            } else {
+                // Not registered: Welcome stays visible. Clicking "Iniciar" opens registration.
+                if (playIntroBtn && welcomeOverlay) {
+                    playIntroBtn.addEventListener('click', () => {
+                        // Hide Welcome Overlay
+                        welcomeOverlay.classList.add('opacity-0');
+                        setTimeout(() => {
+                            welcomeOverlay.classList.add('hidden');
+                            
+                            // Open Registration Modal
+                            const registerModal = document.getElementById('registerModal');
+                            const registerModalContent = document.getElementById('registerModalContent');
+                            if (registerModal && registerModalContent) {
+                                registerModal.classList.remove('hidden');
+                                requestAnimationFrame(() => {
+                                    registerModal.classList.remove('opacity-0');
+                                    registerModalContent.classList.remove('scale-95', 'opacity-0');
+                                    registerModalContent.classList.add('scale-100', 'opacity-100');
+                                });
+                                
+                                // Set active state on user icon
+                                const userNavBtn = document.getElementById('userNavBtn');
+                                if (userNavBtn) {
+                                    document.querySelectorAll('.nav-btn').forEach(b => {
+                                        b.classList.remove('active');
+                                        const dot = b.querySelector('.nav-dot');
+                                        if(dot) dot.style.transform = 'scale(0)';
+                                    });
+                                    userNavBtn.classList.add('active');
+                                    const activeDot = userNavBtn.querySelector('.nav-dot');
+                                    if(activeDot) activeDot.style.transform = 'scale(1)';
+                                }
+                            }
+                        }, 500); // Wait for CSS transition
+                    });
+                }
+            }
+        });
+
+        // User Data Logic (LocalStorage Only)
+        let userData = JSON.parse(localStorage.getItem('ultra_user_data')) || null;
+        let userIP = 'Obteniendo...';
+
+        // Get IP
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                userIP = data.ip;
+                if (userData) {
+                    userData.ip = userIP;
+                    localStorage.setItem('ultra_user_data', JSON.stringify(userData));
+                }
+            })
+            .catch(error => console.error('Error fetching IP:', error));
+
+        // User Registration Logic
+        const userNavBtn = document.getElementById('userNavBtn');
+        const registerModal = document.getElementById('registerModal');
+        const registerModalContent = document.getElementById('registerModalContent');
+        const closeRegisterBtn = document.getElementById('closeRegisterBtn');
+        const submitRegisterBtn = document.getElementById('submitRegisterBtn');
+        const profileModal = document.getElementById('profileModal');
+        const profileModalContent = document.getElementById('profileModalContent');
+        const closeProfileBtn = document.getElementById('closeProfileBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Inputs
+        const regName = document.getElementById('regName');
+        const regBrand = document.getElementById('regBrand');
+        const regPhone = document.getElementById('regPhone');
+
+        // Profile Fields
+        const profileName = document.getElementById('profileName');
+        const profileBrand = document.getElementById('profileBrand');
+        const profilePhone = document.getElementById('profilePhone');
+        const profileInitials = document.getElementById('profileInitials');
+
+        function toggleUserModal() {
+            const hasData = localStorage.getItem('ultra_client_data');
+            
+            if (hasData) {
+                // Show Profile
+                const client = JSON.parse(hasData);
+                profileName.innerText = client.name;
+                profileBrand.innerText = client.brand;
+                profilePhone.innerText = client.phone;
+                profileInitials.innerText = client.name.substring(0, 2).toUpperCase();
+                
+                profileModal.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    profileModal.classList.remove('opacity-0');
+                    profileModalContent.classList.remove('scale-95', 'opacity-0');
+                    profileModalContent.classList.add('scale-100', 'opacity-100');
+                });
+            } else {
+                // Show Register
+                registerModal.classList.remove('hidden');
+                
+                // Si es un pop-up obligatorio porque no tiene sesion, esconder la X de cerrar.
+                if(!hasData) {
+                    closeRegisterBtn.classList.add('hidden');
+                } else {
+                    closeRegisterBtn.classList.remove('hidden');
+                }
+
+                requestAnimationFrame(() => {
+                    registerModal.classList.remove('opacity-0');
+                    registerModalContent.classList.remove('scale-95', 'opacity-0');
+                    registerModalContent.classList.add('scale-100', 'opacity-100');
+                });
+            }
+        }
+
+        function closeUserModals() {
+            // Close Register
+            registerModalContent.classList.remove('scale-100', 'opacity-100');
+            registerModalContent.classList.add('scale-95', 'opacity-0');
+            registerModal.classList.add('opacity-0');
+            
+            // Close Profile
+            profileModalContent.classList.remove('scale-100', 'opacity-100');
+            profileModalContent.classList.add('scale-95', 'opacity-0');
+            profileModal.classList.add('opacity-0');
+
+            setTimeout(() => {
+                registerModal.classList.add('hidden');
+                profileModal.classList.add('hidden');
+            }, 300);
+        }
+
+        userNavBtn.addEventListener('click', () => {
+            // Set active state
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active');
+                b.querySelector('.nav-dot').style.transform = 'scale(0)';
+            });
+            userNavBtn.classList.add('active');
+            userNavBtn.querySelector('.nav-dot').style.transform = 'scale(1)';
+            
+            toggleUserModal();
+        });
+
+        closeRegisterBtn.addEventListener('click', () => {
+            const hasData = localStorage.getItem('ultra_client_data');
+            if (hasData) {
+                closeUserModals();
+            } else {
+                alert('Debes registrarte para continuar navegando');
+            }
+        });
+        
+        closeProfileBtn.addEventListener('click', closeUserModals);
+        
+        registerModal.addEventListener('click', (e) => { 
+            if(e.target === registerModal) {
+                const hasData = localStorage.getItem('ultra_client_data');
+                if (hasData) {
+                    closeUserModals();
+                } else {
+                    // Visual cue
+                    registerModalContent.classList.add('scale-105');
+                    setTimeout(() => registerModalContent.classList.remove('scale-105'), 200);
+                }
+            } 
+        });
+        
+        profileModal.addEventListener('click', (e) => { if(e.target === profileModal) closeUserModals(); });
+
+        // Submit Registration
+        submitRegisterBtn.addEventListener('click', () => {
+            const name = regName.value.trim();
+            const brand = regBrand.value.trim();
+            const phone = regPhone.value.trim();
+
+            if (!name || !brand || !phone) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            const clientData = { name, brand, phone, registeredAt: new Date().toISOString() };
+            localStorage.setItem('ultra_client_data', JSON.stringify(clientData));
+            
+            // Success animation or feedback
+            submitRegisterBtn.innerHTML = '<i class="fas fa-check"></i> Registrado';
+            submitRegisterBtn.classList.add('bg-green-500');
+
+            // Fire Confetti after registration!
+            const duration = 2000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#F27D26', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#F27D26', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+            
+            setTimeout(() => {
+                closeUserModals();
+                // Reset btn
+                submitRegisterBtn.innerHTML = '<span>Guardar Registro</span><i class="fas fa-arrow-right"></i>';
+                submitRegisterBtn.classList.remove('bg-green-500');
+                
+                // Return to home tab in visually
+                const homeBtn = document.querySelector('.nav-btn');
+                if(homeBtn) {
+                    document.querySelectorAll('.nav-btn').forEach(b => {
+                        b.classList.remove('active');
+                        const dot = b.querySelector('.nav-dot');
+                        if(dot) dot.style.transform = 'scale(0)';
+                    });
+                    homeBtn.classList.add('active');
+                    const activeDot = homeBtn.querySelector('.nav-dot');
+                    if(activeDot) activeDot.style.transform = 'scale(1)';
+                }
+            }, 1000);
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            if(confirm('¿Estás seguro de cerrar sesión?')) {
+                localStorage.removeItem('ultra_client_data');
+                closeUserModals();
+                regName.value = '';
+                regBrand.value = '';
+                regPhone.value = '';
+            }
+        });
+
+        // Menu Logic
+        const menu = document.getElementById('menu');
+        const openMenuBtn = document.getElementById('openMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        openMenuBtn.addEventListener('click', () => {
+            menu.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeMenu = () => {
+            menu.classList.remove('open');
+            document.body.style.overflow = '';
+        };
+
+        closeMenuBtn.addEventListener('click', closeMenu);
+        menuItems.forEach(item => item.addEventListener('click', closeMenu));
+
+        // Auto Scroll Logic
+        const scrolls = [
+            document.getElementById('scroll1'),
+            document.getElementById('scroll2'),
+            document.getElementById('scroll3')
+        ];
+
+        let mainScrollInterval;
+        let isMainScrollPaused = false;
+
+        function startMainScroll() {
+            clearInterval(mainScrollInterval);
+            mainScrollInterval = setInterval(() => {
+                if (isMainScrollPaused) return;
+
+                scrolls.forEach(scroll => {
+                    if (scroll) {
+                        const { scrollLeft, scrollWidth, clientWidth } = scroll;
+                        const maxScroll = scrollWidth - clientWidth;
+
+                        if (scrollLeft >= maxScroll - 10) {
+                            scroll.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            scroll.scrollBy({ left: 300, behavior: 'smooth' });
+                        }
+                    }
+                });
+            }, 10000);
+        }
+
+        scrolls.forEach(scroll => {
+            if (scroll) {
+                scroll.addEventListener('mouseenter', () => isMainScrollPaused = true);
+                scroll.addEventListener('mouseleave', () => isMainScrollPaused = false);
+                scroll.addEventListener('touchstart', () => isMainScrollPaused = true, { passive: true });
+                scroll.addEventListener('touchend', () => {
+                    setTimeout(() => isMainScrollPaused = false, 2000);
+                });
+            }
+        });
+
+        startMainScroll();
+
+        // Bottom Nav Scroll Visibility Logic (Position Based)
+        const bottomNavContainer = document.getElementById('bottomNavContainer');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Show when scrolled down (immediately > 10px)
+            if (scrollTop > 10) {
+                bottomNavContainer.classList.remove('translate-y-full', 'opacity-0');
+            } else {
+                // Hide when at top
+                bottomNavContainer.classList.add('translate-y-full', 'opacity-0');
+            }
+        }, { passive: true });
+
+        // Initial check in case of refresh
+        if ((window.pageYOffset || document.documentElement.scrollTop) > 10) {
+            bottomNavContainer.classList.remove('translate-y-full', 'opacity-0');
+        }
+
+        // Bottom Nav Logic
+        function setActiveTab(btn) {
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active');
+                b.querySelector('.nav-dot').style.transform = 'scale(0)';
+            });
+            btn.classList.add('active');
+            btn.querySelector('.nav-dot').style.transform = 'scale(1)';
+        }
+    </script>
+    <!-- Product Detail Modal (New Aesthetic Design) -->
+    <div id="productModal"
+        class="fixed inset-0 z-[300] bg-black/80 backdrop-blur-sm hidden flex items-end md:items-center justify-center p-0 md:p-4 opacity-0 transition-opacity duration-500 will-change-opacity">
+        <div
+            class="relative w-full md:max-w-6xl bg-[#121212] border-t md:border border-white/10 rounded-t-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden transform translate-y-full md:translate-y-0 md:scale-95 transition-all duration-500 will-change-transform flex flex-col md:flex-row max-h-[90vh] md:h-[650px]">
+
+            <!-- Close Button (Floating) -->
+            <button onclick="closeProductModal()"
+                class="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all hover:scale-110 shadow-lg">
+                <i class="fas fa-times text-sm"></i>
+            </button>
+
+            <!-- Main Image Area (Carousel) -->
+            <div id="modalImageContainer"
+                class="relative h-[35vh] md:h-full md:w-1/2 w-full shrink-0 group overflow-hidden transition-all duration-300">
+                <div id="modalCarousel"
+                    class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar w-full h-full scroll-smooth">
+                    <img id="carouselImg1" src="" class="snap-center w-full h-full object-cover shrink-0"
+                        alt="Product 1">
+                    <img id="carouselImg2" src="" class="snap-center w-full h-full object-cover shrink-0"
+                        alt="Product 2">
+                    <img id="carouselImg3" src="" class="snap-center w-full h-full object-cover shrink-0"
+                        alt="Product 3">
+                </div>
+
+                <div
+                    class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#121212] pointer-events-none">
+                </div>
+
+                <!-- Category Tag / Audio Button Container -->
+                <div id="badgeContainer" class="absolute top-6 left-6 z-10">
+                    <span id="defaultBadge"
+                        class="px-3 py-1 bg-primary/90 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-wider text-white shadow-lg shadow-primary/20 border border-white/20">
+                        Destacado
+                    </span>
+                    <!-- Special Audio Button for Vinyl (Hidden by default) -->
+                    <button id="vinylAudioBtn" onclick="toggleCustomAudio()"
+                        class="hidden px-4 py-2 bg-primary/90 backdrop-blur-md rounded-full flex items-center gap-2 text-white shadow-lg shadow-primary/20 border border-white/20 hover:scale-105 transition-transform">
+                        <i class="fas fa-volume-up text-xs" id="vinylPlayIcon"></i>
+                        <span class="text-[10px] font-bold uppercase tracking-wider">Audio</span>
+                        <div class="absolute inset-0 rounded-full border border-white/30 animate-ping opacity-0"
+                            id="vinylPlayPulse"></div>
+                    </button>
+                </div>
+
+                <!-- Carousel Indicators -->
+                <div class="absolute bottom-10 left-0 right-0 flex justify-center gap-2 z-10 pointer-events-none">
+                    <div class="w-2 h-2 rounded-full bg-white transition-all opacity-100 carousel-dot active"
+                        data-index="0"></div>
+                    <div class="w-2 h-2 rounded-full bg-white/40 transition-all carousel-dot" data-index="1"></div>
+                    <div class="w-2 h-2 rounded-full bg-white/40 transition-all carousel-dot" data-index="2"></div>
+                </div>
+
+                <!-- Star Animation Container -->
+                <div id="starContainer"
+                    class="absolute inset-0 flex items-center justify-center pointer-events-none z-20 overflow-hidden">
+                    <i id="likeStar"
+                        class="fas fa-star text-orange-500 text-9xl drop-shadow-[0_0_15px_rgba(249,115,22,0.8)] opacity-0 transform scale-0"></i>
+                </div>
+            </div>
+
+            <!-- Right Column Wrapper -->
+            <div class="flex-1 flex flex-col w-full md:w-1/2 bg-[#121212] rounded-t-[2rem] md:rounded-none md:rounded-r-[3rem] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] md:shadow-none -mt-6 md:mt-0 relative z-10 overflow-hidden">
+                
+                <!-- Content Area (Scrollable) -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar px-6 pt-6 md:px-12 md:pt-12">
+                    <!-- Decorative Top Bar (Mobile Only) -->
+                    <div class="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6 md:hidden"></div>
+
+                    <h3 id="productModalTitle"
+                        class="text-3xl md:text-4xl font-display font-bold text-white mb-2 leading-tight">Título del
+                        Producto</h3>
+
+                    <div class="flex items-center gap-2 mb-6 text-white/40 text-sm">
+                        <i class="fas fa-star text-primary"></i>
+                        <span class="text-white font-bold">4.9</span>
+                        <span>(128 reseñas)</span>
+                    </div>
+
+                    <!-- Hidden Audio Element -->
+                    <audio id="productAudio" class="hidden"></audio>
+                </div>
+
+                <!-- Fixed Bottom Section -->
+                <div class="px-6 pb-8 md:px-12 md:pb-12 bg-[#121212]">
+                    <!-- Professional Audio Player (Container for visibility toggle) -->
+                    <div id="mainAudioPlayer"
+                        class="mb-3 bg-[#1E1E1E] rounded-2xl p-4 border border-white/5 relative overflow-hidden flex items-center gap-4 shadow-lg group">
+                        <!-- Play Button -->
+                        <button id="customPlayBtn" onclick="toggleCustomAudio()"
+                            class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all z-10 shrink-0 relative">
+                            <i class="fas fa-play ml-1" id="playIcon"></i>
+                            <div class="absolute inset-0 rounded-full bg-primary animate-ping opacity-0" id="playPulse"></div>
+                        </button>
+
+                        <!-- Audio Info & Visualizer -->
+                        <div class="flex-1 flex flex-col justify-center overflow-hidden">
+                            <span class="text-xs font-bold uppercase text-white/40 tracking-wider mb-1">Audio de nuestro
+                                producto</span>
+                            <div class="flex items-end gap-[2px] h-16 w-full" id="audioVisualizer">
+                                <!-- Bars will be generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Small Vinyl Player (Hidden by default) -->
+                    <div id="vinylSmallPlayer"
+                        class="hidden mb-3 w-max bg-[#1E1E1E] rounded-full p-2 pr-4 border border-white/5 items-center gap-3 shadow-lg mx-auto">
+                        <button onclick="toggleCustomAudio()"
+                            class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all shrink-0">
+                            <i class="fas fa-volume-up text-xs" id="smallPlayIcon"></i>
+                        </button>
+                        <div class="flex flex-col justify-center w-24">
+                            <span class="text-[9px] font-bold uppercase text-white/60 tracking-wider mb-[2px]">Audio</span>
+                            <div class="flex items-end gap-[2px] h-3 w-full opacity-50" id="smallVisualizer">
+                                <!-- Small bars generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculator Section (Hidden by default) -->
+                    <div id="calculatorSection" class="hidden mb-4 bg-white/5 p-3 rounded-xl border border-white/10">
+                        <h4 class="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                            <i class="fas fa-calculator text-primary gap-1"></i> Calculadora
+                        </h4>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label class="block text-white/60 text-[10px] uppercase font-bold tracking-wider mb-1">Ancho (cm)</label>
+                                <input type="number" id="calcWidth"
+                                    class="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-1.5 text-sm text-white focus:border-primary outline-none"
+                                    placeholder="100" oninput="calculatePrice()">
+                            </div>
+                            <div>
+                                <label class="block text-white/60 text-[10px] uppercase font-bold tracking-wider mb-1">Alto (cm)</label>
+                                <input type="number" id="calcHeight"
+                                    class="w-full bg-black/40 border border-white/10 rounded-lg px-2 py-1.5 text-sm text-white focus:border-primary outline-none"
+                                    placeholder="100" oninput="calculatePrice()">
+                            </div>
+                        </div>
+
+                        <div class="flex gap-2 mb-3">
+                            <!-- Standard Installation Option -->
+                            <div id="installationOption" class="flex-1 flex items-center justify-between bg-black/20 p-2 rounded-lg">
+                                <span class="text-white/80 text-[10px] uppercase font-bold tracking-wider">Instalación</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="calcInstallation" class="sr-only peer" onchange="calculatePrice()">
+                                    <div
+                                        class="w-7 h-4 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Vinyl Plastificado Option (Hidden by default) -->
+                            <div id="vinylOption" class="hidden flex-1 items-center justify-between bg-black/20 p-2 rounded-lg">
+                                <span class="text-white/80 text-[10px] uppercase font-bold tracking-wider">Plastificado</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="calcVinylPlastificado" class="sr-only peer"
+                                        onchange="calculatePrice()">
+                                    <div
+                                        class="w-7 h-4 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2 border-t border-white/10 mt-1">
+                            <span class="text-white/60 text-[10px] uppercase font-bold tracking-wider">Total Est.</span>
+                            <span id="calcPrice" class="text-xl font-bold text-primary leading-none">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <button onclick="quoteProduct()"
+                        class="w-full py-4 bg-gradient-to-r from-primary to-orange-600 rounded-2xl font-bold text-lg text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group relative overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 skew-x-12">
+                        </div>
+                        <span>Asesoría WhatsApp</span>
+                        <i class="fab fa-whatsapp text-xl group-hover:rotate-12 transition-transform"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Product Modal Logic
+        const productModal = document.getElementById('productModal');
+        const productModalTitle = document.getElementById('productModalTitle');
+        const carouselImg1 = document.getElementById('carouselImg1');
+        const carouselImg2 = document.getElementById('carouselImg2');
+        const carouselImg3 = document.getElementById('carouselImg3');
+        const productAudio = document.getElementById('productAudio');
+        const modalCarousel = document.getElementById('modalCarousel');
+        const carouselDots = document.querySelectorAll('.carousel-dot');
+        const playIcon = document.getElementById('playIcon');
+        const playPulse = document.getElementById('playPulse');
+        const customPlayBtn = document.getElementById('customPlayBtn');
+        const audioVisualizer = document.getElementById('audioVisualizer');
+        const likeStar = document.getElementById('likeStar');
+        const calculatorSection = document.getElementById('calculatorSection');
+        const calcWidth = document.getElementById('calcWidth');
+        const calcHeight = document.getElementById('calcHeight');
+        const calcInstallation = document.getElementById('calcInstallation');
+        const calcPrice = document.getElementById('calcPrice');
+        const mainAudioPlayer = document.getElementById('mainAudioPlayer');
+        const defaultBadge = document.getElementById('defaultBadge');
+        const vinylAudioBtn = document.getElementById('vinylAudioBtn');
+        const vinylSmallPlayer = document.getElementById('vinylSmallPlayer');
+        const smallPlayIcon = document.getElementById('smallPlayIcon');
+        const smallVisualizer = document.getElementById('smallVisualizer');
+        const installationOption = document.getElementById('installationOption');
+        const vinylOption = document.getElementById('vinylOption');
+        const calcVinylPlastificado = document.getElementById('calcVinylPlastificado');
+        let audioBars = [];
+        let smallAudioBars = [];
+        let audioInterval;
+        let autoScrollInterval;
+        let currentPriceM2 = 0;
+        let currentInstallPrice = 0;
+        let isCalculatorActive = false;
+        let hasPlayedOnce = false;
+        let isVinylProduct = false;
+
+        // Init Visualizer Bars
+        function initVisualizer() {
+            audioVisualizer.innerHTML = '';
+            smallVisualizer.innerHTML = '';
+
+            // Create main bars
+            for (let i = 0; i < 45; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'w-1 bg-white/20 rounded-full h-2 transition-all duration-300 audio-bar shrink-0 flex-1';
+                audioVisualizer.appendChild(bar);
+            }
+
+            // Create small bars
+            for (let i = 0; i < 15; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'w-[3px] bg-white/60 rounded-full h-1 transition-all duration-200 small-audio-bar shrink-0 flex-1';
+                smallVisualizer.appendChild(bar);
+            }
+
+            audioBars = document.querySelectorAll('.audio-bar');
+            smallAudioBars = document.querySelectorAll('.small-audio-bar');
+        }
+        initVisualizer();
+
+        function openProductModal(element) {
+            const title = element.getAttribute('data-title');
+            const img1 = element.getAttribute('data-image1');
+            const img2 = element.getAttribute('data-image2');
+            const img3 = element.getAttribute('data-image3');
+            const audioSrc = element.getAttribute('data-audio');
+
+            // Calculator Logic
+            isCalculatorActive = element.getAttribute('data-calculator') === 'true';
+            currentPriceM2 = parseFloat(element.getAttribute('data-price-m2')) || 0;
+            currentInstallPrice = parseFloat(element.getAttribute('data-install-price')) || 0;
+
+            // Check if specific vinyl product
+            isVinylProduct = (title === 'Impresion de vinilo');
+
+            if (isCalculatorActive) {
+                calculatorSection.classList.remove('hidden');
+                calcWidth.value = '';
+                calcHeight.value = '';
+                calcInstallation.checked = false;
+                calcVinylPlastificado.checked = false;
+                calcPrice.innerText = '$0';
+
+                if (isVinylProduct) {
+                    // Vinyl Specific: Show Carousel
+                    modalImageContainer.classList.remove('!hidden');
+                    modalImageContainer.classList.remove('hidden');
+                    modalImageContainer.classList.add('h-[35vh]'); // Ensure height is set
+
+                    defaultBadge.classList.add('hidden');
+                    vinylAudioBtn.classList.add('hidden');
+
+                    // Hide main player, show small player
+                    mainAudioPlayer.classList.add('hidden');
+                    vinylSmallPlayer.classList.remove('hidden');
+                    vinylSmallPlayer.classList.add('flex');
+
+                    // Options
+                    installationOption.classList.remove('hidden');
+                    vinylOption.classList.remove('hidden');
+                    vinylOption.classList.add('flex');
+
+                    // Reset checks
+                    calcInstallation.checked = false;
+                } else {
+                    // Standard Calc (if any others)
+                    modalImageContainer.classList.remove('!hidden');
+                    modalImageContainer.classList.remove('hidden');
+
+                    // Reset height classes
+                    modalImageContainer.classList.remove('h-[18vh]');
+                    modalImageContainer.classList.remove('h-[20vh]');
+                    modalImageContainer.classList.remove('h-[30vh]');
+
+                    // New Standard Height Logic
+                    modalImageContainer.classList.add('h-[35vh]'); // Taller on Mobile
+
+                    defaultBadge.classList.remove('hidden');
+                    vinylAudioBtn.classList.add('hidden');
+
+                    // Show main player
+                    mainAudioPlayer.classList.remove('hidden');
+                    vinylSmallPlayer.classList.add('hidden');
+                    vinylSmallPlayer.classList.remove('flex');
+
+                    // Options
+                    installationOption.classList.remove('hidden');
+                    vinylOption.classList.add('hidden');
+                    vinylOption.classList.remove('flex');
+                }
+            } else {
+                calculatorSection.classList.add('hidden');
+                // Standard View
+                modalImageContainer.classList.remove('!hidden');
+                modalImageContainer.classList.remove('hidden');
+
+                modalImageContainer.classList.remove('h-[18vh]');
+                modalImageContainer.classList.remove('h-[20vh]');
+                modalImageContainer.classList.remove('h-[30vh]');
+
+                modalImageContainer.classList.add('h-[35vh]'); // Taller on Mobile
+
+                defaultBadge.classList.remove('hidden');
+                vinylAudioBtn.classList.add('hidden');
+                mainAudioPlayer.classList.remove('hidden');
+                vinylSmallPlayer.classList.add('hidden');
+                vinylSmallPlayer.classList.remove('flex');
+            }
+
+            productModalTitle.innerText = title;
+            carouselImg1.src = img1;
+            carouselImg2.src = img2;
+            carouselImg3.src = img3;
+            productAudio.src = audioSrc;
+
+            // Audio Logic
+            hasPlayedOnce = false;
+            // Auto Play Once for ALL windows
+            if (audioSrc && audioSrc.trim() !== '') {
+                productAudio.play().then(() => {
+                    updateAudioIcon(true); // Update icons for both players
+                    startVisualizer();     // Start animation for both players
+                }).catch(err => {
+                    console.log('Autoplay prevented:', err);
+                    updateAudioIcon(false);
+                });
+            } else {
+                stopCustomAudio();
+            }
+
+            // Reset UI
+            modalCarousel.scrollLeft = 0;
+            updateDots(0);
+            startAutoScroll(); // Start Auto Scroll
+
+            productModal.classList.remove('hidden');
+            // Small delay to allow display:block to apply before opacity transition
+            setTimeout(() => {
+                productModal.classList.remove('opacity-0');
+
+                // Open animation logic
+                const modalContent = productModal.querySelector('div');
+                modalContent.classList.remove('translate-y-full', 'md:scale-95');
+                modalContent.classList.add('translate-y-0', 'md:scale-100');
+            }, 10);
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        function calculatePrice() {
+            if (!isCalculatorActive) return;
+
+            const width = parseFloat(calcWidth.value) || 0;
+            const height = parseFloat(calcHeight.value) || 0;
+            // For vinyl, installation is optional again
+            const includeInstallation = calcInstallation.checked;
+            const includePlastificado = calcVinylPlastificado.checked;
+
+            if (width > 0 && height > 0) {
+                const areaM2 = (width * height) / 10000; // cm to m2
+                let total = 0;
+
+                if (isVinylProduct) {
+                    // Vinyl Logic
+                    // Base price depends on Plastificado ($55k vs $35k)
+                    let basePrice = includePlastificado ? 55000 : 35000;
+                    total = areaM2 * basePrice;
+
+                    // Installation is separate ($17k) and optional
+                    if (includeInstallation) {
+                        total += areaM2 * 17000;
+                    }
+                } else {
+                    // Standard Logic
+                    total = areaM2 * currentPriceM2;
+                    if (includeInstallation) {
+                        total += areaM2 * currentInstallPrice;
+                    }
+                }
+
+                // Format as currency COP
+                calcPrice.innerText = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(total);
+            } else {
+                calcPrice.innerText = '$0';
+            }
+        }
+
+        // Carousel Auto Scroll & Double Click Logic
+        function startAutoScroll() {
+            stopAutoScroll();
+            autoScrollInterval = setInterval(() => {
+                const width = modalCarousel.offsetWidth;
+                const images = modalCarousel.querySelectorAll('img');
+                const totalImages = images.length;
+
+                let currentIndex = Math.round(modalCarousel.scrollLeft / width);
+                let nextIndex = currentIndex + 1;
+
+                if (nextIndex >= totalImages) {
+                    nextIndex = 0;
+                }
+
+                modalCarousel.scrollTo({
+                    left: nextIndex * width,
+                    behavior: 'smooth'
+                });
+            }, 5000); // 5 seconds
+        }
+
+        function stopAutoScroll() {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+        }
+
+        modalCarousel.addEventListener('scroll', () => {
+            const scrollLeft = modalCarousel.scrollLeft;
+            const width = modalCarousel.offsetWidth;
+            const index = Math.round(scrollLeft / width);
+            updateDots(index);
+        });
+
+        // Pause on interaction
+        modalCarousel.addEventListener('touchstart', stopAutoScroll, { passive: true });
+        modalCarousel.addEventListener('mousedown', stopAutoScroll);
+        
+        // Resume on interaction end
+        modalCarousel.addEventListener('touchend', startAutoScroll);
+        modalCarousel.addEventListener('mouseup', startAutoScroll);
+
+        // Double Click Like Effect
+        modalCarousel.addEventListener('dblclick', (e) => {
+            // Trigger Star Animation
+            likeStar.classList.remove('animate-like-star'); // Reset
+            void likeStar.offsetWidth; // Trigger reflow
+            likeStar.classList.add('animate-like-star');
+
+            // Optional: Add haptic feedback or sound if desired
+        });
+
+        function updateDots(index) {
+            carouselDots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-white/40');
+                    dot.classList.add('bg-white', 'scale-125');
+                } else {
+                    dot.classList.add('bg-white/40');
+                    dot.classList.remove('bg-white', 'scale-125');
+                }
+            });
+        }
+
+        // Custom Audio Player Logic
+        function toggleCustomAudio() {
+            if (productAudio.paused) {
+                productAudio.play();
+                updateAudioIcon(true);
+                startVisualizer();
+            } else {
+                productAudio.pause();
+                stopCustomAudio();
+            }
+        }
+
+        function stopCustomAudio() {
+            productAudio.pause();
+            productAudio.currentTime = 0;
+            updateAudioIcon(false);
+            stopVisualizer();
+        }
+
+        function updateAudioIcon(isPlaying) {
+            if (isPlaying) {
+                // Main Player
+                playIcon.classList.remove('fa-play', 'ml-1');
+                playIcon.classList.add('fa-pause');
+                playPulse.classList.remove('opacity-0');
+
+                // Small Player
+                smallPlayIcon.classList.remove('fa-volume-up');
+                smallPlayIcon.classList.add('fa-pause');
+            } else {
+                // Main Player
+                playIcon.classList.add('fa-play', 'ml-1');
+                playIcon.classList.remove('fa-pause');
+                playPulse.classList.add('opacity-0');
+
+                // Small Player
+                smallPlayIcon.classList.add('fa-volume-up');
+                smallPlayIcon.classList.remove('fa-pause');
+            }
+        }
+
+        function startVisualizer() {
+            clearInterval(audioInterval);
+            audioInterval = setInterval(() => {
+                // Main Bars
+                audioBars.forEach(bar => {
+                    const height = Math.floor(Math.random() * 55) + 8;
+                    bar.style.height = `${height}px`;
+                    bar.style.opacity = Math.random() * 0.5 + 0.5;
+                });
+
+                // Small Bars
+                smallAudioBars.forEach(bar => {
+                    const height = Math.floor(Math.random() * 12) + 4; // 4-16px height
+                    bar.style.height = `${height}px`;
+                    bar.style.opacity = Math.random() * 0.5 + 0.5;
+                });
+            }, 100);
+        }
+
+        function stopVisualizer() {
+            clearInterval(audioInterval);
+            audioBars.forEach(bar => {
+                bar.style.height = '4px';
+                bar.style.opacity = '0.5';
+            });
+            smallAudioBars.forEach(bar => {
+                bar.style.height = '4px';
+                bar.style.opacity = '0.5';
+            });
+        }
+
+        productAudio.addEventListener('ended', () => {
+            hasPlayedOnce = true;
+            stopCustomAudio();
+        });
+
+        // Quote Product Logic (WhatsApp Integration)
+        function quoteProduct() {
+            const title = productModalTitle.innerText;
+            // Close modal first
+            closeProductModal();
+
+            // Build message
+            let message = `Hola, me interesa cotizar el servicio: *${title}*`;
+            
+            // Check calculator state (mock)
+            const width = document.getElementById('calcWidth')?.value;
+            const height = document.getElementById('calcHeight')?.value;
+            const price = document.getElementById('calcPrice')?.innerText;
+            
+            if (width && height) {
+                 message += `\n\nDetalles:\n- Medidas: ${width}x${height}cm\n- Precio ref: ${price}`;
+            }
+
+            // Redirect to WhatsApp
+            const phone = "573027502695";
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function closeProductModal() {
+            productModal.classList.add('opacity-0');
+            const modalContent = productModal.querySelector('div');
+
+            // Close animation logic
+            modalContent.classList.remove('translate-y-0', 'md:scale-100');
+            modalContent.classList.add('translate-y-full', 'md:scale-95');
+
+            setTimeout(() => {
+                productModal.classList.add('hidden');
+                stopCustomAudio();
+                productAudio.currentTime = 0;
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Close on click outside
+        productModal.addEventListener('click', (e) => {
+            if (e.target === productModal) {
+                closeProductModal();
+            }
+        });
+
+        // -----------------------------------------------------------
+        // Ultra Remove Background Logic (New Feature)
+        // -----------------------------------------------------------
+        const removeBgNavBtn = document.getElementById('removeBgNavBtn');
+        const removeBgModal = document.getElementById('removeBgModal');
+        const removeBgModalContent = document.getElementById('removeBgModalContent');
+        const closeRemoveBgBtn = document.getElementById('closeRemoveBgBtn');
+        const removeBgInput = document.getElementById('removeBgInput');
+
+        // New UI Elements
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const previewContainer = document.getElementById('previewContainer');
+        const originalImagePreview = document.getElementById('originalImagePreview');
+        const scanningLine = document.getElementById('scanningLine');
+        const resultImageContainer = document.getElementById('resultImageContainer');
+        const processedImage = document.getElementById('processedImage');
+        const removeBgActions = document.getElementById('removeBgActions');
+        const downloadRemoveBgLink = document.getElementById('downloadRemoveBgLink');
+        const resetRemoveBgBtn = document.getElementById('resetRemoveBgBtn');
+
+        // Open Modal
+        removeBgNavBtn.addEventListener('click', () => {
+            removeBgModal.classList.remove('hidden');
+            setTimeout(() => {
+                removeBgModal.classList.remove('opacity-0');
+                // Mobile animation: Slide Up | Desktop: Fade & Scale
+                removeBgModalContent.classList.remove('translate-y-full', 'md:scale-95', 'opacity-0');
+                removeBgModalContent.classList.add('translate-y-0', 'md:scale-100', 'opacity-100');
+            }, 10);
+
+            // Set active state on nav
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active');
+                b.querySelector('.nav-dot').style.transform = 'scale(0)';
+            });
+            removeBgNavBtn.classList.add('active');
+            removeBgNavBtn.querySelector('.nav-dot').style.transform = 'scale(1)';
+        });
+
+        // Close Modal Function
+        function closeRemoveBgModal() {
+            // Reverse animations
+            removeBgModalContent.classList.remove('translate-y-0', 'md:scale-100', 'opacity-100');
+            removeBgModalContent.classList.add('translate-y-full', 'md:scale-95', 'opacity-0');
+
+            removeBgModal.classList.add('opacity-0');
+
+            setTimeout(() => {
+                removeBgModal.classList.add('hidden');
+                resetRemoveBgState();
+            }, 300);
+        }
+
+        closeRemoveBgBtn.addEventListener('click', closeRemoveBgModal);
+        removeBgModal.addEventListener('click', (e) => {
+            if (e.target === removeBgModal) closeRemoveBgModal();
+        });
+
+        // Handle File Upload & Processing Flow
+        removeBgInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 1. Show Original Image Preview
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                originalImagePreview.src = e.target.result;
+                uploadPlaceholder.classList.add('opacity-0');
+                setTimeout(() => {
+                    uploadPlaceholder.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+
+                    // 2. Start Scanning Effect (Over Original Image)
+                    scanningLine.classList.remove('hidden');
+
+                    // Proceed to API Call after a short delay for effect
+                    processImage(file);
+                }, 300);
+            };
+            reader.readAsDataURL(file);
+        });
+
+        async function processImage(file) {
+            try {
+                // Call Remove.bg API
+                const formData = new FormData();
+                formData.append('image_file', file);
+                formData.append('size', 'auto');
+
+                const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+                    method: 'POST',
+                    headers: {
+                        'X-Api-Key': 'XsMeiEN2GUTy5ckCSppVoj5L'
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Error en la API');
+
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+
+                // 3. Show Result (Replace Original)
+                processedImage.src = imageUrl;
+                downloadRemoveBgLink.href = imageUrl;
+
+                // Ensure result is visible and original is hidden
+                setTimeout(() => {
+                    scanningLine.classList.add('hidden');
+                    originalImagePreview.classList.add('hidden'); // IMPORTANT: Hide original to avoid ghosting
+                    resultImageContainer.classList.remove('hidden');
+                    removeBgActions.classList.remove('hidden');
+                }, 2000); // Wait 2s for scanning effect to "finish"
+
+            } catch (error) {
+                console.error(error);
+                // Show more detailed error
+                let errorMsg = 'Error al procesar. Verifica tu conexión.';
+                if (error.message.includes('API')) errorMsg = 'Error en el servicio de IA (API Key o Límites).';
+
+                alert(errorMsg);
+                resetRemoveBgState();
+            }
+        }
+
+        // Reset State
+        function resetRemoveBgState() {
+            removeBgInput.value = '';
+
+            // UI Reset
+            uploadPlaceholder.classList.remove('hidden', 'opacity-0');
+            previewContainer.classList.add('hidden');
+            scanningLine.classList.add('hidden');
+            resultImageContainer.classList.add('hidden');
+            removeBgActions.classList.add('hidden');
+
+            originalImagePreview.classList.remove('hidden'); // Restore original for next time
+            originalImagePreview.src = '';
+            processedImage.src = '';
+        }
+
+        resetRemoveBgBtn.addEventListener('click', resetRemoveBgState);
+    </script>
+</body>
+
+</html>
