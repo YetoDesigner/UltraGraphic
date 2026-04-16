@@ -43,6 +43,8 @@ export default function App() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [deviceOS, setDeviceOS] = useState<'android' | 'ios' | 'other'>('other');
 
   // Product Modal Data
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -52,11 +54,28 @@ export default function App() {
   const [qrImageSrc, setQrImageSrc] = useState('');
 
   useEffect(() => {
+    // Definimos isStandalone de forma global para usarlo en el renderizado
+    const checkIsStandalone = () => {
+      const standalone = window.matchMedia('(display-mode: standalone)').matches || 
+             ('standalone' in window.navigator && (window.navigator as any).standalone);
+      setIsStandalone(standalone);
+      return standalone;
+    };
+    checkIsStandalone(); // Ejecutar la verificación inicial
+
+    // Detectar SO
+    const detectOS = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      if (/iphone|ipad|ipod/.test(userAgent)) return 'ios';
+      if (/android/.test(userAgent)) return 'android';
+      return 'other';
+    };
+    setDeviceOS(detectOS());
+
     // Control de modal PWA
     const checkAndShowPwaModal = () => {
       // Si la app ya está instalada (standalone), no hacemos nada
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || ('standalone' in window.navigator && (window.navigator as any).standalone);
-      if (isStandalone) return;
+      if (checkIsStandalone()) return;
 
       const pwaViews = parseInt(sessionStorage.getItem('pwaPromptViews') || '0', 10);
       
@@ -76,13 +95,7 @@ export default function App() {
       checkAndShowPwaModal();
     });
 
-    // Detectar iOS para PWA
-    const isIos = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      return /iphone|ipad|ipod/.test(userAgent);
-    };
-
-    if (isIos()) {
+    if (detectOS() === 'ios') {
       checkAndShowPwaModal();
     }
 
@@ -530,7 +543,7 @@ export default function App() {
           </button>
 
           {/* Install PWA Button - Shown if not standalone */}
-          {!(window.matchMedia('(display-mode: standalone)').matches || ('standalone' in window.navigator && (window.navigator as any).standalone)) && (
+          {!isStandalone && (
             <button onClick={() => setShowInstallModal(true)} className="relative p-2 transition-all duration-300 text-white/40 hover:text-primary hover:scale-105">
               <IconDownload size={24} />
             </button>
@@ -697,21 +710,35 @@ export default function App() {
             </div>
             <h3 className="font-display text-2xl font-bold text-white mb-3">Instala Ultra Graphic</h3>
             <p className="text-sm text-white/60 mb-8">Instala Ultra Graphic en tu celular, y resive el mejor contenido publicitario para tu negocio.</p>
-            <button onClick={async () => {
-              if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                  setDeferredPrompt(null);
-                  setShowInstallModal(false);
+            
+            {deviceOS === 'ios' ? (
+              <div className="bg-white/5 p-4 rounded-xl border border-white/10 mb-4">
+                <p className="text-sm text-white font-medium mb-3">Para instalar en tu iPhone o iPad:</p>
+                <ol className="text-left text-xs text-white/70 space-y-3">
+                  <li className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0">1</span>
+                    <span>Toca el botón <strong className="text-white">Compartir</strong> <svg className="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> en la barra inferior</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0">2</span>
+                    <span>Selecciona <strong className="text-white">"Agregar a inicio"</strong> <svg className="w-4 h-4 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg></span>
+                  </li>
+                </ol>
+              </div>
+            ) : (
+              <button onClick={async () => {
+                if (deferredPrompt) {
+                  deferredPrompt.prompt();
+                  const { outcome } = await deferredPrompt.userChoice;
+                  if (outcome === 'accepted') {
+                    setDeferredPrompt(null);
+                    setShowInstallModal(false);
+                  }
                 }
-              } else {
-                // Para iOS
-                alert('Para instalar en iOS: Toca el botón Compartir y luego "Agregar a inicio".');
-              }
-            }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
-              Instalar Ahora
-            </button>
+              }} className="w-full bg-gradient-to-r from-primary to-[#E55A00] text-white font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(242,125,38,0.4)]">
+                Instalar Ahora
+              </button>
+            )}
           </div>
         </div>
       )}
