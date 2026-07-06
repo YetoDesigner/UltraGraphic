@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>aison publicidad — tienda</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: { extend: {
+      fontFamily: { sans: ['"Cerebri Sans"', 'Manrope', 'system-ui', 'sans-serif'] },
+      colors: { naranja:'#FF6A00', naranjad:'#FF3D00', ambar:'#FF9E00' }
+    }}
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root { color-scheme: light dark; }
+  body { font-weight: 700; }
+
+  .thumb { position: relative; overflow: hidden; }
+  .thumb .icon {
+    position: absolute; inset: 0 0 22% 0; display: grid; place-items: center;
+    font-size: clamp(3rem, 14vw, 6.5rem); filter: drop-shadow(0 6px 14px rgba(0,0,0,.3));
+  }
+  .scrim { position:absolute; inset:0;
+    background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.35) 30%, rgba(0,0,0,0) 55%); }
+
+  @keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.35)} 100%{transform:scale(1)} }
+  .liked { animation: pop .35s ease; }
+
+  /* Carrusel horizontal con snap */
+  .hscroll { scrollbar-width:none; scroll-snap-type: x mandatory; }
+  .hscroll::-webkit-scrollbar { display:none; }
+  .hscroll > * { scroll-snap-align: start; }
+
+  html { scroll-behavior: smooth; }
+  ::-webkit-scrollbar { height:8px; width:10px; }
+  ::-webkit-scrollbar-thumb { background:#FF6A00; border-radius:99px; }
+
+  #chatPanel { transition: opacity .25s ease, transform .25s ease; }
+  #chatPanel.hidden-chat { opacity:0; transform: scale(.99); pointer-events:none; }
+  #chatMsgs::-webkit-scrollbar { width:6px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    .liked { animation:none; }
+  }
+</style>
+</head>
+
+<body class="font-sans bg-[#F5F5F2] text-[#1A1A1A] dark:bg-black dark:text-neutral-100 transition-colors duration-300">
+
+<!-- ===== HEADER ===== -->
+<header class="sticky top-0 z-40 bg-transparent">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <a href="#top" class="flex items-center shrink-0">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png"
+           alt="aison publicidad" class="block dark:hidden h-10 w-auto">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4R9mm-uI35uMNdAQr1N-WvkAQI7eCWOoLb908RGAukxbkXhVu98iUoQIy6b3mnxcg9iOEQg9RIVLhyphenhyphenxKR1T1wKQGH6rCxEtAY3In0H1ECk9LgtTX7j7XW_Ouf97It4ceAQl4fhdWcJ-u1e7VvlfquycdzYZFlwZVlq-4BqaAuCzHDgmfmYsWgdqUNai2M/s3543/WDWDAW.png"
+           alt="aison publicidad" class="hidden dark:block h-10 w-auto">
+    </a>
+
+    <div class="flex items-center gap-2">
+      <button onclick="toggleChat()" aria-label="Abrir chat"
+        class="flex items-center gap-2 px-4 py-2 rounded-full bg-naranja text-white text-sm font-bold hover:brightness-110 active:scale-95 transition shadow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        <span class="hidden sm:inline">Chat</span>
+      </button>
+
+      <button onclick="toggleTheme()" aria-label="Cambiar tema"
+        class="flex items-center justify-center w-10 h-10 rounded-full border border-black/15 dark:border-white/25 hover:text-naranja hover:border-naranja transition">
+        <svg class="hidden dark:block" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="block dark:hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO: carrusel grande, avanza solo uno a uno ===== -->
+<section id="top" class="pt-6 pb-10">
+  <p class="max-w-5xl mx-auto px-4 sm:px-6 text-xs uppercase tracking-[0.3em] text-naranja font-bold mb-4">Destacados</p>
+  <div id="hero-track" class="hscroll flex gap-5 overflow-x-auto px-4 sm:px-6 pb-4"></div>
+</section>
+
+<!-- ===== CATÁLOGO ===== -->
+<main id="catalogo" class="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+  <div class="flex items-center justify-between mb-6 gap-4">
+    <h2 class="font-extrabold text-2xl">Catálogo</h2>
+    <div class="inline-flex p-1 rounded-full border border-black/15 dark:border-white/20">
+      <button id="btn-vitrina" onclick="setView('vitrina')"
+        class="view-btn flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold transition">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Vitrina
+      </button>
+      <button id="btn-feed" onclick="setView('feed')"
+        class="view-btn flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold transition">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="7" rx="1.5"/><rect x="4" y="14" width="16" height="7" rx="1.5"/></svg>
+        Feed
+      </button>
+    </div>
+  </div>
+  <div id="products" class="grid gap-4"></div>
+</main>
+
+<footer class="border-t border-black/10 dark:border-white/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 text-center text-sm text-black/50 dark:text-white/50 font-medium">
+    © 2026 aison publicidad · Diseño e impresión.
+  </div>
+</footer>
+
+<!-- ===== CHATBOT: pantalla completa, solo la X ===== -->
+<div id="chatPanel" class="hidden-chat fixed inset-0 z-50 flex flex-col bg-white/25 dark:bg-black/30 backdrop-blur-2xl">
+  <!-- Solo botón cerrar -->
+  <button onclick="toggleChat()" aria-label="Cerrar chat"
+    class="absolute top-4 right-4 z-10 w-11 h-11 grid place-items-center rounded-full bg-black/10 dark:bg-white/10 text-current hover:bg-black/20 dark:hover:bg-white/20 transition text-lg">✕</button>
+
+  <!-- Mensajes -->
+  <div id="chatMsgs" class="flex-1 overflow-y-auto px-4 pt-20 pb-4 w-full max-w-2xl mx-auto space-y-3 text-sm"></div>
+
+  <!-- Barra de entrada -->
+  <div class="px-4 pb-6 pt-2 w-full max-w-2xl mx-auto">
+    <div class="flex items-end gap-2">
+      <!-- Botón + con menú -->
+      <div class="relative">
+        <div id="attachMenu" class="hidden absolute bottom-14 left-0 w-44 rounded-2xl overflow-hidden border border-black/10 dark:border-white/15 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl shadow-xl">
+          <label class="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-naranja hover:text-white transition text-sm">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+            Subir imagen
+            <input type="file" accept="image/*" class="hidden" onchange="sendImage(event)">
+          </label>
+          <label class="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-naranja hover:text-white transition text-sm border-t border-black/10 dark:border-white/10">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Tomar foto
+            <input type="file" accept="image/*" capture="environment" class="hidden" onchange="sendImage(event)">
+          </label>
+        </div>
+        <button onclick="toggleAttachMenu()" aria-label="Adjuntar"
+          class="w-11 h-11 grid place-items-center rounded-full bg-white/60 dark:bg-white/10 hover:text-naranja transition">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+      </div>
+
+      <!-- Casilla con enviar (flecha ↑) dentro -->
+      <div class="relative flex-1">
+        <input id="chatInput" type="text" placeholder="Escribe tu mensaje…"
+          onkeydown="if(event.key==='Enter')sendMsg()"
+          class="w-full pl-4 pr-14 py-3 rounded-full bg-white/70 dark:bg-black/40 text-[#1A1A1A] dark:text-white placeholder-black/40 dark:placeholder-white/40 outline-none focus:ring-2 focus:ring-naranja">
+        <button onclick="sendMsg()" aria-label="Enviar"
+          class="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 grid place-items-center rounded-full bg-naranja text-white hover:brightness-110 active:scale-95 transition">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const products = [
+  { name:"Pendones publicitarios",  desc:"Lona banner full color, resistente a la intemperie.", icon:"🖼️", grad:"from-ambar to-naranjad",   price:null,       likes:128, kw:["pendon","pendones","banner","lona"] },
+  { name:"Tarjetas de presentación",desc:"Propalcote 300g, acabado mate o brillante.",           icon:"💳", grad:"from-naranja to-ambar",    price:"$35.000",  likes:96,  kw:["tarjeta","tarjetas","presentacion"] },
+  { name:"Volantes publicitarios",  desc:"Media carta full color, ideal para promociones.",       icon:"📄", grad:"from-naranjad to-naranja", price:"$80.000",  likes:74,  kw:["volante","volantes","flyer","flyers"] },
+  { name:"Pendón Roll-Up",          desc:"Estructura portátil con estuche. Montaje rápido.",       icon:"📱", grad:"from-naranja to-naranjad", price:null,       likes:203, kw:["rollup","roll-up","roll up","araña"] },
+  { name:"Vallas publicitarias",    desc:"Gran formato exterior. Alto impacto visual.",            icon:"🏙️", grad:"from-ambar to-naranja",    price:null,       likes:311, kw:["valla","vallas"] },
+  { name:"Vinilos adhesivos",       desc:"Corte de precisión para vidrieras y superficies.",       icon:"✨", grad:"from-naranjad to-ambar",   price:"$25.000",  likes:152, kw:["vinilo","vinilos","adhesivo","adhesivos","sticker","stickers"] },
+  { name:"Brochures y catálogos",   desc:"Plegables y encuadernados. Diseño incluido.",            icon:"📚", grad:"from-naranja to-naranjad", price:"$150.000", likes:88,  kw:["brochure","brochures","catalogo","catalogos","plegable"] },
+  { name:"Letreros luminosos",      desc:"Avisos en acrílico con iluminación LED.",                icon:"💡", grad:"from-ambar to-naranjad",   price:null,       likes:264, kw:["letrero","letreros","luminoso","aviso","acrilico","led"] },
+  { name:"Camisetas estampadas",    desc:"Estampado DTF o sublimación. Desde 1 unidad.",           icon:"👕", grad:"from-naranja to-ambar",    price:"$18.000",  likes:187, kw:["camiseta","camisetas","estampado","dtf","sublimacion"] },
+  { name:"Rotulación vehicular",    desc:"Vinilo microperforado y de corte para tu flota.",        icon:"🚚", grad:"from-naranjad to-naranja", price:null,       likes:145, kw:["rotulacion","vehicular","carro","carros","flota","vehiculo"] },
+];
+
+let currentView = 'vitrina';
+const liked = new Set();
+
+/* ---------- Hero (imágenes grandes) ---------- */
+function heroCard(p){
+  return `
+  <a href="#catalogo" class="shrink-0 w-[20rem] sm:w-[26rem]">
+    <div class="thumb h-[28rem] sm:h-[34rem] rounded-3xl bg-gradient-to-br ${p.grad}">
+      <span class="icon">${p.icon}</span>
+      <div class="scrim"></div>
+      <div class="absolute inset-x-0 bottom-0 p-6 text-white">
+        <h3 class="font-extrabold text-2xl leading-tight">${p.name}</h3>
+        <p class="text-sm font-medium text-white/80 mb-3">${p.desc}</p>
+        <span class="inline-block px-4 py-1.5 rounded-full bg-naranja text-white text-sm font-bold">${p.price || 'Cotiza aquí'}</span>
+      </div>
+    </div>
+  </a>`;
+}
+function renderHero(){
+  document.getElementById('hero-track').innerHTML = products.map(heroCard).join('');
+}
+
+/* ---------- Carrusel automático 1x1 + control manual (espera 4s) ---------- */
+let heroTimer = null, heroIdle = null;
+function heroStep(){
+  const t = document.getElementById('hero-track');
+  const first = t.firstElementChild; if(!first) return;
+  const stepX = first.getBoundingClientRect().width + 20; // gap 1.25rem
+  if(t.scrollLeft + t.clientWidth >= t.scrollWidth - 12){
+    t.scrollTo({ left:0, behavior:'smooth' });
+  } else {
+    t.scrollBy({ left:stepX, behavior:'smooth' });
+  }
+}
+function heroPlay(){ clearInterval(heroTimer); heroTimer = setInterval(heroStep, 4000); }
+function heroPauseThenResume(){
+  clearInterval(heroTimer);
+  clearTimeout(heroIdle);
+  heroIdle = setTimeout(heroPlay, 4000); // reanuda tras 4s sin tocar
+}
+function initHeroAuto(){
+  const t = document.getElementById('hero-track');
+  ['wheel','touchstart','pointerdown'].forEach(ev =>
+    t.addEventListener(ev, heroPauseThenResume, { passive:true }));
+  heroPlay();
+}
+
+/* ---------- Catálogo ---------- */
+function render(){
+  const wrap = document.getElementById('products');
+  const isFeed = currentView === 'feed';
+  wrap.className = isFeed ? 'grid grid-cols-1 gap-6 max-w-xl mx-auto' : 'grid grid-cols-2 gap-3 sm:gap-4';
+  wrap.innerHTML = products.map((p,i)=>card(p,i,isFeed)).join('');
+}
+function heartBtn(i){
+  const l = liked.has(i); const n = products[i].likes + (l?1:0);
+  return `<button onclick="toggleLike(${i})" aria-label="Me gusta"
+    class="flex items-center gap-1.5 text-sm font-bold ${l?'text-naranja':'text-white'} hover:text-naranja transition">
+    <svg class="${l?'liked':''}" width="22" height="22" viewBox="0 0 24 24" fill="${l?'#FF6A00':'none'}" stroke="currentColor" stroke-width="2">
+    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+    <span>${n}</span></button>`;
+}
+function ctaPill(p,full){
+  const label = p.price ? `Comprar ${p.price}` : 'Solicitar cotización';
+  return `<button class="${full?'w-full ':''}px-4 py-2 rounded-full bg-naranja text-white text-sm font-bold hover:brightness-110 active:scale-95 transition">${label}</button>`;
+}
+function card(p,i,isFeed){
+  if(isFeed){
+    // Feed: un poco más alto (vertical)
+    return `
+    <article class="thumb aspect-[4/5] rounded-[2rem] bg-gradient-to-br ${p.grad} shadow-md">
+      <span class="icon">${p.icon}</span>
+      <div class="absolute top-0 inset-x-0 p-4 flex items-center gap-2 text-white">
+        <span class="font-bold text-sm lowercase drop-shadow">aison publicidad</span>
+        <span class="ml-auto text-xs font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">Patrocinado</span>
+      </div>
+      <div class="scrim"></div>
+      <div class="absolute inset-x-0 bottom-0 p-5 text-white space-y-3">
+        <div>
+          <h3 class="font-extrabold text-xl leading-tight">${p.name}</h3>
+          <p class="text-sm font-medium text-white/80">${p.desc}</p>
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-4">
+            ${heartBtn(i)}
+            <button aria-label="Compartir" class="text-white hover:text-naranja transition">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+            </button>
+          </div>
+          ${ctaPill(p,false)}
+        </div>
+      </div>
+    </article>`;
+  }
+  // Vitrina: cuadrada
+  return `
+  <article class="thumb aspect-square rounded-[2rem] bg-gradient-to-br ${p.grad} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition">
+    <span class="icon">${p.icon}</span>
+    <div class="absolute top-3 right-3">${heartBtn(i)}</div>
+    <div class="scrim"></div>
+    <div class="absolute inset-x-0 bottom-0 p-4 text-white space-y-2.5">
+      <div>
+        <h3 class="font-extrabold text-base sm:text-lg leading-tight">${p.name}</h3>
+        <p class="text-xs font-medium text-white/80 line-clamp-2">${p.desc}</p>
+      </div>
+      ${ctaPill(p,true)}
+    </div>
+  </article>`;
+}
+function toggleLike(i){ liked.has(i)?liked.delete(i):liked.add(i); render(); }
+function setView(v){
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('bg-naranja','text-white'));
+  document.getElementById(v==='feed'?'btn-feed':'btn-vitrina').classList.add('bg-naranja','text-white');
+  render();
+}
+function toggleTheme(){ document.documentElement.classList.toggle('dark'); }
+
+/* ================= CHATBOT ================= */
+function toggleChat(){
+  const p = document.getElementById('chatPanel');
+  p.classList.toggle('hidden-chat');
+  document.getElementById('attachMenu').classList.add('hidden');
+  if(!p.classList.contains('hidden-chat')){
+    const m = document.getElementById('chatMsgs');
+    if(!m.dataset.init){
+      botSay("¡Hola! 👋 Soy el asistente de <b>aison publicidad</b>. Te doy precios, resuelvo dudas y armo tu cotización. ¿Qué producto te interesa? Ej.: pendones, tarjetas, vinilos, camisetas…");
+      m.dataset.init = "1";
+    }
+    setTimeout(()=>document.getElementById('chatInput').focus(),100);
+  }
+}
+function toggleAttachMenu(){ document.getElementById('attachMenu').classList.toggle('hidden'); }
+
+function bubble(role, inner){
+  const wrap = document.getElementById('chatMsgs');
+  const mine = role === 'user';
+  const el = document.createElement('div');
+  el.className = 'flex ' + (mine ? 'justify-end' : 'justify-start');
+  el.innerHTML = `<div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl leading-snug ${
+    mine ? 'bg-naranja text-white rounded-br-sm'
+         : 'bg-white/90 dark:bg-neutral-800/90 text-[#1A1A1A] dark:text-white rounded-bl-sm'}">${inner}</div>`;
+  wrap.appendChild(el);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function botSay(html){ setTimeout(()=>bubble('bot', html), 300); }
+
+function findProduct(t){ return products.find(p => p.kw.some(k => t.includes(k))); }
+function botReply(raw){
+  const t = raw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  if(/\b(hola|buenas|buenos|hey|hi|que tal)\b/.test(t))
+    return "¡Hola! Con gusto te ayudo. ¿Buscas algún producto en especial o te muestro el catálogo completo?";
+  if(/(catalogo|productos|que venden|que ofrecen|todo)/.test(t))
+    return "Estos son nuestros productos:<br>• " + products.map(p=>p.name).join("<br>• ") + "<br><br>¿Sobre cuál quieres precio o cotización?";
+  const p = findProduct(t);
+  if(p){
+    const precio = p.price
+      ? `El precio es <b>${p.price}</b> y podemos empezar hoy mismo.`
+      : `Se cotiza a medida según tamaño y cantidad. <b>Cuéntame medidas y cantidad</b> y te paso el valor al instante.`;
+    return `<b>${p.name}</b> — ${p.desc}<br>${precio}<br>¿Te preparo la cotización? 🧡`;
+  }
+  if(/(precio|cuanto|vale|cuesta|valor)/.test(t))
+    return "Claro, dime el producto (por ejemplo: tarjetas, pendones, vinilos) y te doy el precio de una vez.";
+  if(/(cotiza|cotizacion|presupuesto)/.test(t))
+    return "¡Perfecto! Para tu cotización dime: <b>producto, cantidad y medidas</b>. Con eso te doy el valor y el tiempo de entrega.";
+  if(/(envio|entrega|despacho|domicilio)/.test(t))
+    return "Hacemos entregas a domicilio y también puedes recoger. Dime tu ciudad y la cantidad para calcular tiempos. 🚚";
+  if(/(contacto|whatsapp|telefono|llamar|numero)/.test(t))
+    return "Podemos seguir por WhatsApp para agilizar tu pedido. Dime tu producto de interés y coordinamos pago y entrega. ✅";
+  if(/(gracias|listo|ok|vale)/.test(t))
+    return "¡Con gusto! ¿Quieres que te arme la cotización ahora para asegurar el precio de hoy? 🧡";
+  return "Puedo ayudarte con precios y cotizaciones. Escríbeme el producto que te interese (pendones, tarjetas, volantes, vinilos, camisetas, vallas, letreros, rotulación…) y lo resolvemos.";
+}
+function sendMsg(){
+  const inp = document.getElementById('chatInput');
+  const txt = inp.value.trim();
+  if(!txt) return;
+  bubble('user', txt.replace(/</g,'&lt;'));
+  inp.value = '';
+  botSay(botReply(txt));
+}
+function sendImage(ev){
+  const file = ev.target.files[0];
+  document.getElementById('attachMenu').classList.add('hidden');
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    bubble('user', `<img src="${e.target.result}" class="rounded-xl max-h-40 w-auto">`);
+    botSay("¡Recibí tu imagen! 📸 ¿La imprimimos tal cual, la usamos de referencia o la adaptamos a un producto (pendón, camiseta, vinilo)? Te armo la cotización.");
+  };
+  r.readAsDataURL(file);
+  ev.target.value = '';
+}
+
+/* ---------- Init ---------- */
+renderHero();
+initHeroAuto();
+setView('vitrina');
+</script>
+</body>
+</html>
