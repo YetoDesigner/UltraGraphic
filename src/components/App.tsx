@@ -86,7 +86,13 @@ const App: React.FC = () => {
       return "Claro, dime el producto (por ejemplo: tarjetas, pendones, vinilos) y te doy el precio de una vez.";
     if(/(cotiza|cotizacion|presupuesto)/.test(t))
       return "¡Perfecto! Para tu cotización dime: <b>producto, cantidad y medidas</b>. Con eso te doy el valor y el tiempo de entrega.";
-    return "Puedo ayudarte con precios y cotizaciones. Escríbeme el producto que te interese y lo resolvemos.";
+    if(/(envio|entrega|despacho|domicilio)/.test(t))
+      return "Hacemos entregas a domicilio y también puedes recoger. Dime tu ciudad y la cantidad para calcular tiempos. 🚚";
+    if(/(contacto|whatsapp|telefono|llamar|numero)/.test(t))
+      return "Podemos seguir por WhatsApp para agilizar tu pedido. Dime tu producto de interés y coordinamos pago y entrega. ✅";
+    if(/(gracias|listo|ok|vale)/.test(t))
+      return "¡Con gusto! ¿Quieres que te arme la cotización ahora para asegurar el precio de hoy? 🧡";
+    return "Puedo ayudarte con precios y cotizaciones. Escríbeme el producto que te interese (pendones, tarjetas, volantes, vinilos, camisetas, vallas, letreros, rotulación…) y lo resolvemos.";
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,9 +104,10 @@ const App: React.FC = () => {
     reader.onload = (event) => {
       const result = event.target?.result as string;
       setMessages(prev => [...prev, { role: 'user', content: `<img src="${result}" class="rounded-xl max-h-40 w-auto">` }]);
-      botSay("¡Recibí tu imagen! 📸 ¿La imprimimos tal cual o la adaptamos a un producto? Te armo la cotización.");
+      botSay("¡Recibí tu imagen! 📸 ¿La imprimimos tal cual, la usamos de referencia o la adaptamos a un producto (pendón, camiseta, vinilo)? Te armo la cotización.");
     };
     reader.readAsDataURL(file);
+    e.target.value = '';
   };
 
   // Hero Auto-scroll logic
@@ -188,24 +195,50 @@ const App: React.FC = () => {
         <div className={`grid gap-4 ${view === 'feed' ? 'grid-cols-1 max-w-xl mx-auto' : 'grid-cols-2'}`}>
           {products.map((p, i) => (
             <article key={i} className={`thumb rounded-[2rem] bg-gradient-to-br ${p.grad} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition ${view === 'feed' ? 'aspect-[4/5]' : 'aspect-square'}`}>
-              <span className="icon">{p.icon}</span>
-              <div className="absolute top-3 right-3">
-                <button onClick={() => toggleLike(i)} className={`flex items-center gap-1.5 text-sm font-bold ${likedProducts.has(i) ? 'text-orange-600' : 'text-white'} transition`}>
-                  <svg className={likedProducts.has(i) ? 'liked' : ''} width="22" height="22" viewBox="0 0 24 24" fill={likedProducts.has(i) ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2">
-                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
-                  </svg>
-                  <span>{p.likes + (likedProducts.has(i) ? 1 : 0)}</span>
-                </button>
-              </div>
-              <div className="scrim"></div>
-              <div className="absolute inset-x-0 bottom-0 p-4 text-white space-y-2.5">
-                <div>
-                  <h3 className="font-extrabold text-base sm:text-lg leading-tight">{p.name}</h3>
-                  <p className="text-xs font-medium text-white/80 line-clamp-2">{p.desc}</p>
+              {view === 'feed' && (
+                <div className="absolute top-0 inset-x-0 p-4 flex items-center gap-2 text-white z-10">
+                  <span className="font-bold text-sm lowercase drop-shadow">Nano Banana</span>
+                  <span className="ml-auto text-xs font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">Patrocinado</span>
                 </div>
-                <button className="w-full px-4 py-2 rounded-full bg-orange-600 text-white text-sm font-bold hover:brightness-110 active:scale-95 transition">
-                  {p.price ? `Comprar ${p.price}` : 'Solicitar cotización'}
-                </button>
+              )}
+              
+              <span className="icon">{p.icon}</span>
+              
+              <div className={view === 'feed' ? "absolute bottom-5 inset-x-0 px-5 flex items-center justify-between gap-3 z-20" : "absolute top-3 right-3 z-20"}>
+                <div className="flex items-center gap-4">
+                  <button onClick={() => toggleLike(i)} className={`flex items-center gap-1.5 text-sm font-bold ${likedProducts.has(i) ? 'text-orange-600' : 'text-white'} transition`}>
+                    <svg className={likedProducts.has(i) ? 'liked' : ''} width="22" height="22" viewBox="0 0 24 24" fill={likedProducts.has(i) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+                    </svg>
+                    <span>{p.likes + (likedProducts.has(i) ? 1 : 0)}</span>
+                  </button>
+                  
+                  {view === 'feed' && (
+                    <button aria-label="Compartir" className="text-white hover:text-orange-600 transition">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+                    </button>
+                  )}
+                </div>
+                
+                {view === 'feed' && (
+                  <button className="px-4 py-2 rounded-full bg-orange-600 text-white text-sm font-bold hover:brightness-110 active:scale-95 transition">
+                    {p.price ? `Comprar ${p.price}` : 'Solicitar cotización'}
+                  </button>
+                )}
+              </div>
+
+              <div className="scrim"></div>
+              
+              <div className={`absolute inset-x-0 bottom-0 p-4 text-white space-y-2.5 ${view === 'feed' ? 'pb-20' : ''}`}>
+                <div>
+                  <h3 className={`font-extrabold leading-tight ${view === 'feed' ? 'text-xl' : 'text-base sm:text-lg'}`}>{p.name}</h3>
+                  <p className={`font-medium text-white/80 ${view === 'feed' ? 'text-sm' : 'text-xs line-clamp-2'}`}>{p.desc}</p>
+                </div>
+                {view === 'vitrina' && (
+                  <button className="w-full px-4 py-2 rounded-full bg-orange-600 text-white text-sm font-bold hover:brightness-110 active:scale-95 transition">
+                    {p.price ? `Comprar ${p.price}` : 'Solicitar cotización'}
+                  </button>
+                )}
               </div>
             </article>
           ))}
@@ -239,9 +272,14 @@ const App: React.FC = () => {
               {isAttachMenuOpen && (
                 <div className="absolute bottom-14 left-0 w-44 rounded-2xl overflow-hidden border border-black/10 dark:border-white/15 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl shadow-xl">
                   <label className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-orange-600 hover:text-white transition text-sm">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
                     Subir imagen
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                  </label>
+                  <label className="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-orange-600 hover:text-white transition text-sm border-t border-black/10 dark:border-white/10">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    Tomar foto
+                    <input type="file" accept="image/*" capture="environment" className="hidden" onChange={handleImageUpload} />
                   </label>
                 </div>
               )}
