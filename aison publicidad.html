@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>aison publicidad — tienda</title>
+<title>Nano Banana — tienda</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -61,10 +61,9 @@
 <header class="sticky top-0 z-40 bg-transparent">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
     <a href="#top" class="flex items-center shrink-0">
-      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9dbXCLX0LwICy_lfT6QHQKT4sSKxvKC0zl3lxT9e2giqf_Y5CO6SHu8YMNAnHPSe_Vfmi1_9NMCmYcdJ3oDHQfcfhcNalQnMSNzj6IdfqCGoc84H3f5q3HcxYUk8KHGPjCI2fVLxgNgCmqTwVGO3Y9qXSf1fhgut85W8v4qPywTVhyphenhyphentFiy8vSNFFn_aY9/s3543/DWDAWDAWD.png"
-           alt="aison publicidad" class="block dark:hidden h-10 w-auto">
-      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj4R9mm-uI35uMNdAQr1N-WvkAQI7eCWOoLb908RGAukxbkXhVu98iUoQIy6b3mnxcg9iOEQg9RIVLhyphenhyphenxKR1T1wKQGH6rCxEtAY3In0H1ECk9LgtTX7j7XW_Ouf97It4ceAQl4fhdWcJ-u1e7VvlfquycdzYZFlwZVlq-4BqaAuCzHDgmfmYsWgdqUNai2M/s3543/WDWDAW.png"
-           alt="aison publicidad" class="hidden dark:block h-10 w-auto">
+      <img src="https://static.cdnlogo.com/logos/n/65/nano-banana.svg"
+           alt="Nano Banana" class="h-10 w-auto">
+      <span class="font-extrabold text-lg sm:text-xl">Nano Banana</span>
     </a>
 
     <div class="flex items-center gap-2">
@@ -111,7 +110,7 @@
 
 <footer class="border-t border-black/10 dark:border-white/10">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 text-center text-sm text-black/50 dark:text-white/50 font-medium">
-    © 2026 aison publicidad · Diseño e impresión.
+    © 2026 Nano Banana · Diseño e impresión.
   </div>
 </footer>
 
@@ -161,218 +160,6 @@
   </div>
 </div>
 
-<script>
-const products = [
-  { name:"Pendones publicitarios",  desc:"Lona banner full color, resistente a la intemperie.", icon:"🖼️", grad:"from-ambar to-naranjad",   price:null,       likes:128, kw:["pendon","pendones","banner","lona"] },
-  { name:"Tarjetas de presentación",desc:"Propalcote 300g, acabado mate o brillante.",           icon:"💳", grad:"from-naranja to-ambar",    price:"$35.000",  likes:96,  kw:["tarjeta","tarjetas","presentacion"] },
-  { name:"Volantes publicitarios",  desc:"Media carta full color, ideal para promociones.",       icon:"📄", grad:"from-naranjad to-naranja", price:"$80.000",  likes:74,  kw:["volante","volantes","flyer","flyers"] },
-  { name:"Pendón Roll-Up",          desc:"Estructura portátil con estuche. Montaje rápido.",       icon:"📱", grad:"from-naranja to-naranjad", price:null,       likes:203, kw:["rollup","roll-up","roll up","araña"] },
-  { name:"Vallas publicitarias",    desc:"Gran formato exterior. Alto impacto visual.",            icon:"🏙️", grad:"from-ambar to-naranja",    price:null,       likes:311, kw:["valla","vallas"] },
-  { name:"Vinilos adhesivos",       desc:"Corte de precisión para vidrieras y superficies.",       icon:"✨", grad:"from-naranjad to-ambar",   price:"$25.000",  likes:152, kw:["vinilo","vinilos","adhesivo","adhesivos","sticker","stickers"] },
-  { name:"Brochures y catálogos",   desc:"Plegables y encuadernados. Diseño incluido.",            icon:"📚", grad:"from-naranja to-naranjad", price:"$150.000", likes:88,  kw:["brochure","brochures","catalogo","catalogos","plegable"] },
-  { name:"Letreros luminosos",      desc:"Avisos en acrílico con iluminación LED.",                icon:"💡", grad:"from-ambar to-naranjad",   price:null,       likes:264, kw:["letrero","letreros","luminoso","aviso","acrilico","led"] },
-  { name:"Camisetas estampadas",    desc:"Estampado DTF o sublimación. Desde 1 unidad.",           icon:"👕", grad:"from-naranja to-ambar",    price:"$18.000",  likes:187, kw:["camiseta","camisetas","estampado","dtf","sublimacion"] },
-  { name:"Rotulación vehicular",    desc:"Vinilo microperforado y de corte para tu flota.",        icon:"🚚", grad:"from-naranjad to-naranja", price:null,       likes:145, kw:["rotulacion","vehicular","carro","carros","flota","vehiculo"] },
-];
-
-let currentView = 'vitrina';
-const liked = new Set();
-
-/* ---------- Hero (imágenes grandes) ---------- */
-function heroCard(p){
-  return `
-  <a href="#catalogo" class="shrink-0 w-[20rem] sm:w-[26rem]">
-    <div class="thumb h-[28rem] sm:h-[34rem] rounded-3xl bg-gradient-to-br ${p.grad}">
-      <span class="icon">${p.icon}</span>
-      <div class="scrim"></div>
-      <div class="absolute inset-x-0 bottom-0 p-6 text-white">
-        <h3 class="font-extrabold text-2xl leading-tight">${p.name}</h3>
-        <p class="text-sm font-medium text-white/80 mb-3">${p.desc}</p>
-        <span class="inline-block px-4 py-1.5 rounded-full bg-naranja text-white text-sm font-bold">${p.price || 'Cotiza aquí'}</span>
-      </div>
-    </div>
-  </a>`;
-}
-function renderHero(){
-  document.getElementById('hero-track').innerHTML = products.map(heroCard).join('');
-}
-
-/* ---------- Carrusel automático 1x1 + control manual (espera 4s) ---------- */
-let heroTimer = null, heroIdle = null;
-function heroStep(){
-  const t = document.getElementById('hero-track');
-  const first = t.firstElementChild; if(!first) return;
-  const stepX = first.getBoundingClientRect().width + 20; // gap 1.25rem
-  if(t.scrollLeft + t.clientWidth >= t.scrollWidth - 12){
-    t.scrollTo({ left:0, behavior:'smooth' });
-  } else {
-    t.scrollBy({ left:stepX, behavior:'smooth' });
-  }
-}
-function heroPlay(){ clearInterval(heroTimer); heroTimer = setInterval(heroStep, 4000); }
-function heroPauseThenResume(){
-  clearInterval(heroTimer);
-  clearTimeout(heroIdle);
-  heroIdle = setTimeout(heroPlay, 4000); // reanuda tras 4s sin tocar
-}
-function initHeroAuto(){
-  const t = document.getElementById('hero-track');
-  ['wheel','touchstart','pointerdown'].forEach(ev =>
-    t.addEventListener(ev, heroPauseThenResume, { passive:true }));
-  heroPlay();
-}
-
-/* ---------- Catálogo ---------- */
-function render(){
-  const wrap = document.getElementById('products');
-  const isFeed = currentView === 'feed';
-  wrap.className = isFeed ? 'grid grid-cols-1 gap-6 max-w-xl mx-auto' : 'grid grid-cols-2 gap-3 sm:gap-4';
-  wrap.innerHTML = products.map((p,i)=>card(p,i,isFeed)).join('');
-}
-function heartBtn(i){
-  const l = liked.has(i); const n = products[i].likes + (l?1:0);
-  return `<button onclick="toggleLike(${i})" aria-label="Me gusta"
-    class="flex items-center gap-1.5 text-sm font-bold ${l?'text-naranja':'text-white'} hover:text-naranja transition">
-    <svg class="${l?'liked':''}" width="22" height="22" viewBox="0 0 24 24" fill="${l?'#FF6A00':'none'}" stroke="currentColor" stroke-width="2">
-    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
-    <span>${n}</span></button>`;
-}
-function ctaPill(p,full){
-  const label = p.price ? `Comprar ${p.price}` : 'Solicitar cotización';
-  return `<button class="${full?'w-full ':''}px-4 py-2 rounded-full bg-naranja text-white text-sm font-bold hover:brightness-110 active:scale-95 transition">${label}</button>`;
-}
-function card(p,i,isFeed){
-  if(isFeed){
-    // Feed: un poco más alto (vertical)
-    return `
-    <article class="thumb aspect-[4/5] rounded-[2rem] bg-gradient-to-br ${p.grad} shadow-md">
-      <span class="icon">${p.icon}</span>
-      <div class="absolute top-0 inset-x-0 p-4 flex items-center gap-2 text-white">
-        <span class="font-bold text-sm lowercase drop-shadow">aison publicidad</span>
-        <span class="ml-auto text-xs font-medium bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">Patrocinado</span>
-      </div>
-      <div class="scrim"></div>
-      <div class="absolute inset-x-0 bottom-0 p-5 text-white space-y-3">
-        <div>
-          <h3 class="font-extrabold text-xl leading-tight">${p.name}</h3>
-          <p class="text-sm font-medium text-white/80">${p.desc}</p>
-        </div>
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-4">
-            ${heartBtn(i)}
-            <button aria-label="Compartir" class="text-white hover:text-naranja transition">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
-            </button>
-          </div>
-          ${ctaPill(p,false)}
-        </div>
-      </div>
-    </article>`;
-  }
-  // Vitrina: cuadrada
-  return `
-  <article class="thumb aspect-square rounded-[2rem] bg-gradient-to-br ${p.grad} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition">
-    <span class="icon">${p.icon}</span>
-    <div class="absolute top-3 right-3">${heartBtn(i)}</div>
-    <div class="scrim"></div>
-    <div class="absolute inset-x-0 bottom-0 p-4 text-white space-y-2.5">
-      <div>
-        <h3 class="font-extrabold text-base sm:text-lg leading-tight">${p.name}</h3>
-        <p class="text-xs font-medium text-white/80 line-clamp-2">${p.desc}</p>
-      </div>
-      ${ctaPill(p,true)}
-    </div>
-  </article>`;
-}
-function toggleLike(i){ liked.has(i)?liked.delete(i):liked.add(i); render(); }
-function setView(v){
-  currentView = v;
-  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('bg-naranja','text-white'));
-  document.getElementById(v==='feed'?'btn-feed':'btn-vitrina').classList.add('bg-naranja','text-white');
-  render();
-}
-function toggleTheme(){ document.documentElement.classList.toggle('dark'); }
-
-/* ================= CHATBOT ================= */
-function toggleChat(){
-  const p = document.getElementById('chatPanel');
-  p.classList.toggle('hidden-chat');
-  document.getElementById('attachMenu').classList.add('hidden');
-  if(!p.classList.contains('hidden-chat')){
-    const m = document.getElementById('chatMsgs');
-    if(!m.dataset.init){
-      botSay("¡Hola! 👋 Soy el asistente de <b>aison publicidad</b>. Te doy precios, resuelvo dudas y armo tu cotización. ¿Qué producto te interesa? Ej.: pendones, tarjetas, vinilos, camisetas…");
-      m.dataset.init = "1";
-    }
-    setTimeout(()=>document.getElementById('chatInput').focus(),100);
-  }
-}
-function toggleAttachMenu(){ document.getElementById('attachMenu').classList.toggle('hidden'); }
-
-function bubble(role, inner){
-  const wrap = document.getElementById('chatMsgs');
-  const mine = role === 'user';
-  const el = document.createElement('div');
-  el.className = 'flex ' + (mine ? 'justify-end' : 'justify-start');
-  el.innerHTML = `<div class="max-w-[80%] px-3.5 py-2.5 rounded-2xl leading-snug ${
-    mine ? 'bg-naranja text-white rounded-br-sm'
-         : 'bg-white/90 dark:bg-neutral-800/90 text-[#1A1A1A] dark:text-white rounded-bl-sm'}">${inner}</div>`;
-  wrap.appendChild(el);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-function botSay(html){ setTimeout(()=>bubble('bot', html), 300); }
-
-function findProduct(t){ return products.find(p => p.kw.some(k => t.includes(k))); }
-function botReply(raw){
-  const t = raw.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  if(/\b(hola|buenas|buenos|hey|hi|que tal)\b/.test(t))
-    return "¡Hola! Con gusto te ayudo. ¿Buscas algún producto en especial o te muestro el catálogo completo?";
-  if(/(catalogo|productos|que venden|que ofrecen|todo)/.test(t))
-    return "Estos son nuestros productos:<br>• " + products.map(p=>p.name).join("<br>• ") + "<br><br>¿Sobre cuál quieres precio o cotización?";
-  const p = findProduct(t);
-  if(p){
-    const precio = p.price
-      ? `El precio es <b>${p.price}</b> y podemos empezar hoy mismo.`
-      : `Se cotiza a medida según tamaño y cantidad. <b>Cuéntame medidas y cantidad</b> y te paso el valor al instante.`;
-    return `<b>${p.name}</b> — ${p.desc}<br>${precio}<br>¿Te preparo la cotización? 🧡`;
-  }
-  if(/(precio|cuanto|vale|cuesta|valor)/.test(t))
-    return "Claro, dime el producto (por ejemplo: tarjetas, pendones, vinilos) y te doy el precio de una vez.";
-  if(/(cotiza|cotizacion|presupuesto)/.test(t))
-    return "¡Perfecto! Para tu cotización dime: <b>producto, cantidad y medidas</b>. Con eso te doy el valor y el tiempo de entrega.";
-  if(/(envio|entrega|despacho|domicilio)/.test(t))
-    return "Hacemos entregas a domicilio y también puedes recoger. Dime tu ciudad y la cantidad para calcular tiempos. 🚚";
-  if(/(contacto|whatsapp|telefono|llamar|numero)/.test(t))
-    return "Podemos seguir por WhatsApp para agilizar tu pedido. Dime tu producto de interés y coordinamos pago y entrega. ✅";
-  if(/(gracias|listo|ok|vale)/.test(t))
-    return "¡Con gusto! ¿Quieres que te arme la cotización ahora para asegurar el precio de hoy? 🧡";
-  return "Puedo ayudarte con precios y cotizaciones. Escríbeme el producto que te interese (pendones, tarjetas, volantes, vinilos, camisetas, vallas, letreros, rotulación…) y lo resolvemos.";
-}
-function sendMsg(){
-  const inp = document.getElementById('chatInput');
-  const txt = inp.value.trim();
-  if(!txt) return;
-  bubble('user', txt.replace(/</g,'&lt;'));
-  inp.value = '';
-  botSay(botReply(txt));
-}
-function sendImage(ev){
-  const file = ev.target.files[0];
-  document.getElementById('attachMenu').classList.add('hidden');
-  if(!file) return;
-  const r = new FileReader();
-  r.onload = e => {
-    bubble('user', `<img src="${e.target.result}" class="rounded-xl max-h-40 w-auto">`);
-    botSay("¡Recibí tu imagen! 📸 ¿La imprimimos tal cual, la usamos de referencia o la adaptamos a un producto (pendón, camiseta, vinilo)? Te armo la cotización.");
-  };
-  r.readAsDataURL(file);
-  ev.target.value = '';
-}
-
-/* ---------- Init ---------- */
-renderHero();
-initHeroAuto();
-setView('vitrina');
-</script>
+<script type="module" src="./src/main.js"></script>
 </body>
 </html>
